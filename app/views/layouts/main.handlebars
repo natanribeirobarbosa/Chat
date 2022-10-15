@@ -1,0 +1,24 @@
+<html lang="pt-br">
+<head>
+	<meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+	<title>Chat</title>
+	{{{_sections.head}}}
+	
+<head>
+<style>
+	.flash{
+		background-color: rgb(10,200,15);
+	}
+	{{{_sections.style}}}
+</style>
+{{#if flash}}
+	<div class="flash">
+		{{{flash}}}
+	</div>
+{{/if}}
+	<body>
+	<h1><a href="/">CHAT</a></h1>
+	{{{body}}}
+	</body>
+	{{{_sections.script}}}
+<html>

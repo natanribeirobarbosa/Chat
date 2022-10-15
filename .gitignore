@@ -1,0 +1,5 @@
+# ignora pacotes instalados pelo npm
+node_modules
+# coloque aqui qualquer outro arquivo que não queira
+# inserir no repositório, como .DS_Store
+# (OSX), *.bak etc

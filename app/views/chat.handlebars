@@ -1,0 +1,133 @@
+{{#section 'style'}}
+	#result{
+	height:100px;
+	overflow:auto;
+	}
+	div{
+	max-width:50%}
+	b{
+	float:right	}
+{{/section}}
+<div>
+<p>Aqui você pode conversar!{{id}}</p>
+<p id="result"></p>
+<form id="form">
+	<label>Para:</label>
+	<input name= "dest" type="text"><br>
+	<label>Mensagem:</label>
+	<input name="texto" type="text"><br>
+	<input type="submit" value="enviar">
+	
+</form>
+</div>
+{{#section 'script'}}
+<script>
+	{{#if mensagem}}
+		if({{mensagem}} == 1){
+		procuraParceiro()
+		}else{
+			procuraMensagens()
+		}  
+	{{/if}}
+
+document.getElementById('form').addEventListener('submit', (evt) => {
+		evt.preventDefault()
+		const form = evt.target
+		const body = JSON.stringify({
+		texto: form.elements.texto.value,
+		dest: form.elements.dest.value,
+		})
+		const headers = { 'Content-Type': 'application/json'}
+		const result = document.getElementById('result')
+		
+		
+		fetch('/api/send', {method: 'post', body, headers}).then(
+		resp => {
+					if(resp.status <200 || resp.status >= 300)
+					throw new Error(`Erro na requisição com o status: ${resp.status}`)
+					return resp.json()
+					
+		}).then(json => {
+						
+						result.innerHTML += json.resp+'<br>'
+						})
+		.catch(err => {
+						result.innerHTML = 'DEU ALGO ERRADO: '+err
+						console.log('erro: '+err)
+	})
+	
+	})
+	const headers = { 'Content-Type': 'application/json'}
+	//setInterval(70,procuraMensagens())
+
+	function procuraMensagens() {
+	
+	console.log('procurando mensagens!')
+	fetch('/api/resp', {method: 'post', headers}).then(
+		resp => {
+					if(resp.status <200 || resp.status >= 300)
+					throw new Error(`Erro na requisição com o status: ${resp.status}`) 
+					
+					return resp.json()
+					
+		}).then(json => {
+						//console.log(json)
+						console.log('procura!')
+						if(json.mensagem == 1){result.innerHTML = 'User abandonou a conversa... <a onclick="procuraParceiro()">iniciar novo diálogo</a>'
+						//return
+						}else 
+						
+						{
+						if(json.mensagem != null){
+						result.innerHTML += json.mensagem+'<br>'
+						procuraMensagens()}else{
+						procuraMensagens()}
+						}
+						
+						 
+						
+					})
+		.catch(err => { 
+						window.alert=err
+	})
+	
+	
+	}
+	
+	
+	function procuraParceiro() {
+	result.innerHTML = 'Procurando participante'
+	console.log('procura parceiro!')
+	fetch('/loading', {method: 'post'}).then(
+		resp => {
+					if(resp.status <200 || resp.status >= 300)
+					throw new Error(`Erro na requisição com o status: ${resp.status}`)
+					return resp.json()
+					 
+		}).then(json => {
+						if(json.res == false){
+						procuraParceiro()
+						}else{
+							result.innerHTML = 'Já pode conversar!'+{{id}}
+							procuraMensagens()
+						}
+						})
+		.catch(err => { 
+						console.log(err)
+	
+	
+	
+	})	}
+	
+	window.addEventListener('beforeunload',  (evt) => {
+   fetch('/api/bye', {method: 'post'})
+ //
+});
+
+function novaConversa(){
+	fetch('/api/bye', {method: 'post'})
+}
+	
+	</script>
+	
+	{{/section}}
