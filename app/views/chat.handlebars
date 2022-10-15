@@ -71,20 +71,7 @@ document.getElementById('form').addEventListener('submit', (evt) => {
 					return resp.json()
 					
 		}).then(json => {
-						//console.log(json)
-						console.log('procura!')
-						if(json.mensagem == 1){result.innerHTML = 'User abandonou a conversa... <a onclick="procuraParceiro()">iniciar novo diálogo</a>'
-						//return
-						}else 
-						
-						{
-						if(json.mensagem != null){
-						result.innerHTML += json.mensagem+'<br>'
-						procuraMensagens()}else{
-						procuraMensagens()}
-						}
-						
-						 
+					 
 						
 					})
 		.catch(err => { 
@@ -105,12 +92,7 @@ document.getElementById('form').addEventListener('submit', (evt) => {
 					return resp.json()
 					 
 		}).then(json => {
-						if(json.res == false){
-						procuraParceiro()
-						}else{
-							result.innerHTML = 'Já pode conversar!'+{{id}}
-							procuraMensagens()
-						}
+					
 						})
 		.catch(err => { 
 						console.log(err)
@@ -121,7 +103,6 @@ document.getElementById('form').addEventListener('submit', (evt) => {
 	
 	window.addEventListener('beforeunload',  (evt) => {
    fetch('/api/bye', {method: 'post'})
- //
 });
 
 function novaConversa(){
