@@ -13,6 +13,9 @@ Como funciona a aplicação?
 	1-O user ganha um identificador que serve 
 
 */
+
+
+//isso vai para o branch "vetor"
 const express = require('express')
 const app = express()
 
