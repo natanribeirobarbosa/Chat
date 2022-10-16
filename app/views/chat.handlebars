@@ -12,22 +12,22 @@
 <p>Aqui você pode conversar!{{id}}</p>
 <p id="result"></p>
 <form id="form">
-	<label>Para:</label>
-	<input name= "dest" type="text"><br>
-	<label>Mensagem:</label>
-	<input name="texto" type="text"><br>
-	<input type="submit" value="enviar">
+
+
 	
 </form>
 </div>
 {{#section 'script'}}
 <script>
-	{{#if mensagem}}
-		if({{mensagem}} == 1){
+	{{#if message}}
+		if({{message}} == 1){
 		procuraParceiro()
 		}else{
-			procuraMensagens()
+					document.getElementById('form').innerHTML = '<label>Mensagem:</label><input name="texto" type="text"><input type="submit" value="enviar">'
+					procuraMensagens() 
 		}  
+		
+		
 	{{/if}}
 
 document.getElementById('form').addEventListener('submit', (evt) => {
@@ -42,40 +42,51 @@ document.getElementById('form').addEventListener('submit', (evt) => {
 		
 		
 		fetch('/api/send', {method: 'post', body, headers}).then(
+		
 		resp => {
 					if(resp.status <200 || resp.status >= 300)
+					console.log('requisição de envio')
 					throw new Error(`Erro na requisição com o status: ${resp.status}`)
 					return resp.json()
 					
 		}).then(json => {
-						
+						console.log('requisição de envio')
 						result.innerHTML += json.resp+'<br>'
 						})
 		.catch(err => {
+		console.log('requisição de envio')
 						result.innerHTML = 'DEU ALGO ERRADO: '+err
 						console.log('erro: '+err)
 	})
 	
 	})
-	const headers = { 'Content-Type': 'application/json'}
-	//setInterval(70,procuraMensagens())
-
-	function procuraMensagens() {
 	
-	console.log('procurando mensagens!')
+	
+	function procuraMensagens() {
+	const headers = { 'Content-Type': 'application/json'}
+	
 	fetch('/api/resp', {method: 'post', headers}).then(
 		resp => {
 					if(resp.status <200 || resp.status >= 300)
 					throw new Error(`Erro na requisição com o status: ${resp.status}`) 
-					
+					console.log('FALHA NA REQUISIÇÂO!')
 					return resp.json()
 					
 		}).then(json => {
-					 
+		console.log('procurando mensagens!')
+					 	if(json.envio == 1){
+						console.log('PARCEIRO OFFLINE')
+						document.getElementById('result').innerHTML = 'Parceiro offline'
+					document.getElementById('form').innerHTML = ""
+
+					}else{
+					procuraMensagens()
+					}
 						
 					})
 		.catch(err => { 
 						window.alert=err
+						console.log('REQUISIÇÂO NEGADA')
 	})
 	
 	
@@ -84,7 +95,7 @@ document.getElementById('form').addEventListener('submit', (evt) => {
 	
 	function procuraParceiro() {
 	result.innerHTML = 'Procurando participante'
-	console.log('procura parceiro!')
+	
 	fetch('/loading', {method: 'post'}).then(
 		resp => {
 					if(resp.status <200 || resp.status >= 300)
@@ -92,7 +103,15 @@ document.getElementById('form').addEventListener('submit', (evt) => {
 					return resp.json()
 					 
 		}).then(json => {
+					if(json.m == true){
+					console.log('procura parceiro!')
+					document.getElementById('form').innerHTML = '<label>Mensagem:</label><input name="texto" type="text"><input type="submit" value="enviar">'
+					procuraMensagens()
 					
+					
+					}else{
+					procuraParceiro()
+					}
 						})
 		.catch(err => { 
 						console.log(err)
