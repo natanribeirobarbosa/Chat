@@ -9,7 +9,7 @@
 	float:right	}
 {{/section}}
 <div>
-<p>Aqui você pode conversar!{{id}}</p>
+
 <p id="result"></p>
 <form id="form">
 
@@ -19,17 +19,84 @@
 </div>
 {{#section 'script'}}
 <script>
+
+//verifica se o destino está pronto
 	{{#if message}}
 		if({{message}} == 1){
 		procuraParceiro()
 		}else{
+					document.getElementById('result').innerHTML = 'Você já está falando com alguém!'
 					document.getElementById('form').innerHTML = '<label>Mensagem:</label><input name="texto" type="text"><input type="submit" value="enviar">'
-					procuraMensagens() 
+					//procuraMensagens() 
 		}  
-		
-		
 	{{/if}}
 
+
+//mantém o user online
+ function online(){
+	const headers = { 'Content-Type': 'application/json'}
+fetch('/api/online', {method: 'post', headers}).then(resp => {
+			if(resp.status <200 || resp.status >= 300){
+				console.log('falha na requisição...')
+				throw new Error(`Erro na requisição com o status: ${resp.status}`)
+				result.innerHTML = 'DEU ALGO ERRADO: '+err
+				online()
+				}
+			return resp.json()
+	}).then(json => {
+			console.log('ONLINE')
+			
+			if(json.envio == 1){
+						console.log('Algo aconteceu...')
+						document.getElementById('result').innerHTML = 'Algo aconteceu...'
+					document.getElementById('form').innerHTML = '<a href="/chat">Iniciar de novo</a>'
+					}else{
+					
+		online()}
+	
+	}).catch(err => {
+	result.innerHTML = 'DEU ALGO ERRADO: '+err
+	online()
+	})
+}
+online()
+
+
+//Procura algum parceiro disponivel
+  function procuraParceiro() {
+	result.innerHTML = 'Procurando participante'
+	const headers = { 'Content-Type': 'application/json'}
+	fetch('/loading', {method: 'post', headers}).then(
+		resp => {
+					if(resp.status <200 || resp.status >= 300){
+					console.log('falha na requisição...')
+					throw new Error(`Erro na requisição com o status: ${resp.status}`)
+					procuraParceiro()
+					}
+					return resp.json()
+					
+					 
+		}).then(json => {
+					if(json.m == true){
+					console.log('procura parceiro!')
+					document.getElementById('result').innerHTML = 'Você já está falando com alguém!'
+					document.getElementById('form').innerHTML = '<label>Mensagem:</label><input name="texto" type="text"><input type="submit" value="enviar">'
+					procuraMensagens()
+					
+					
+					}else{
+					procuraParceiro()
+					}
+						})
+		.catch(err => { 
+		procuraParceiro()
+						console.log(err)
+	
+	
+	
+	})	}
+
+//enviar mensagem
 document.getElementById('form').addEventListener('submit', (evt) => {
 		evt.preventDefault()
 		const form = evt.target
@@ -42,7 +109,6 @@ document.getElementById('form').addEventListener('submit', (evt) => {
 		
 		
 		fetch('/api/send', {method: 'post', body, headers}).then(
-		
 		resp => {
 					if(resp.status <200 || resp.status >= 300)
 					console.log('requisição de envio')
@@ -60,8 +126,9 @@ document.getElementById('form').addEventListener('submit', (evt) => {
 	})
 	
 	})
-	
-	
+
+//procura mensagens
+/*
 	function procuraMensagens() {
 	const headers = { 'Content-Type': 'application/json'}
 	
@@ -74,14 +141,13 @@ document.getElementById('form').addEventListener('submit', (evt) => {
 					
 		}).then(json => {
 		console.log('procurando mensagens!')
-					 	if(json.envio == 1){
+	if(json.envio == 1){
 						console.log('PARCEIRO OFFLINE')
 						document.getElementById('result').innerHTML = 'Parceiro offline'
-					document.getElementById('form').innerHTML = ""
-
+					document.getElementById('form').innerHTML = '<a href="/chat">Iniciar de novo</a>'
 					}else{
-					procuraMensagens()
-					}
+					procuraMensagens()}
+					
 						
 					})
 		.catch(err => { 
@@ -91,42 +157,14 @@ document.getElementById('form').addEventListener('submit', (evt) => {
 	
 	
 	}
+	*/
 	
 	
-	function procuraParceiro() {
-	result.innerHTML = 'Procurando participante'
-	
-	fetch('/loading', {method: 'post'}).then(
-		resp => {
-					if(resp.status <200 || resp.status >= 300)
-					throw new Error(`Erro na requisição com o status: ${resp.status}`)
-					return resp.json()
-					 
-		}).then(json => {
-					if(json.m == true){
-					console.log('procura parceiro!')
-					document.getElementById('form').innerHTML = '<label>Mensagem:</label><input name="texto" type="text"><input type="submit" value="enviar">'
-					procuraMensagens()
-					
-					
-					}else{
-					procuraParceiro()
-					}
-						})
-		.catch(err => { 
-						console.log(err)
-	
-	
-	
-	})	}
-	
-	window.addEventListener('beforeunload',  (evt) => {
-   fetch('/api/bye', {method: 'post'})
-});
 
-function novaConversa(){
-	fetch('/api/bye', {method: 'post'})
-}
+	
+
+
+
 	
 	</script>
 	
