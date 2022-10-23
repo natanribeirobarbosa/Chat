@@ -53,7 +53,7 @@ var blacklist = []
 
 app.get('/', (req, res) => { 
 	res.render('index')
-	console.log('online users: '+onlineUsers+', Blacklist: '+blacklist)
+	console.log('online users: '+onlineUsers+', Blacklist: '+blacklist+', mesagens: '+JSON.stringify(mensagens))
 
 	
 })
@@ -66,6 +66,9 @@ app.get('/chat', (req, res) => {
 		
 		if(onlineUsers.indexOf(req.session.name) == -1){//o úsuario está online? se não, agora está.
 			onlineUsers.push(req.session.name)
+			}else{
+				onlineUsers.splice(onlineUsers.indexOf(req.session.name), 1)
+				onlineUsers.push(req.session.name)
 			}
 
 		
@@ -74,7 +77,7 @@ app.get('/chat', (req, res) => {
 							position: onlineUsers.indexOf(req.session.name)
 							} 
 		 
-	
+	mensagens[user.id] = []
 		 
 		if(user.position % 2 != 0){//A posição do úsuario no array é impar? se sim,  seu destino é uma posição atrás no array
 			var i = onlineUsers.indexOf(user.id)-1
@@ -125,15 +128,14 @@ console.log('Varredura completa! Usuarios online: '+onlineUsers+', blacklist: '+
 app.post('/api/online', (req, res) => { 
 if( blacklist.indexOf(req.session.name) != -1){
 	var pos = blacklist.indexOf(req.session.name)
-blacklist.splice(pos, 1)}
+	blacklist.splice(pos, 1)}
 		
-
-	//	if(onlineUsers.indexOf(req.session.name) == -1){//Você está online?
-	//	res.send({envio: 1})
+	if(onlineUsers.indexOf(req.session.name) == -1){//Você está online?
+		res.send({envio: 1})
 		
-	//}else{
+	}else{
 		res.send({envio: 2})
-	//}
+	}
 		
 		res.end()
 	
@@ -144,7 +146,10 @@ blacklist.splice(pos, 1)}
 })
 
 app.post('/api/send', (req, res) => { 
-	res.send()
+	mensagens[req.session.dest].push(req.body.texto)
+	console.log(req.body.texto)
+	res.send({chave: 'valor'})
+	
 	res.end()
 })  
  
@@ -158,19 +163,19 @@ app.post('/api/resp', (req, res) => {
 		res.send({envio: 1}) 
 		//console.log('O destino: '+req.session.dest+'Esta offline!')
 	}else{
-		res.send({envio: 2}) 
+		if(mensagens[req.session.name].length != 0){
+			var msg = mensagens[req.session.name][0]
+			mensagens[req.session.name].splice(mensagens[req.session.name][0], 1)
+			res.send({envio: 2, mensagem: msg}) 
+		}else{
+			res.send({envio: 2}) 
+		}
+		
 		//console.log('O destino: '+req.session.dest+' Esta online!')
 	}
+	res.end()
 })   
  
- /*
-app.post('/api/bye', (req, res) => {
-	var pos = onlineUsers.indexOf(req.session.name)
-	onlineUsers.splice(pos, 1)
-	req.session.dest = null
-	console.log('"/api/bye" O úsuario '+pos+' ficou offline! pessoas online no momento: '+onlineUsers)
-	res.redirect(303, '/chat')
-}) */
    
  app.post('/loading', (req, res) =>{
 	 	var dest = onlineUsers.indexOf(req.session.name)+1
