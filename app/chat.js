@@ -140,9 +140,7 @@ app.post('/api/chat2', (req, res) => {
 		}
 		})  
 
-app.get('/teste', (req, res) => {
-	res.render('choices')
-})
+
 
 
  
