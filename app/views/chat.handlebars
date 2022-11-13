@@ -1,71 +1,126 @@
 {{#section 'style'}}
-	#result{
-	height:100px;
-	overflow:auto;
+	<style>
+
+	#container{
+	position: absolute;
+	top:0;
+	    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+	
 	}
-	div{
-	max-width:50%}
-	b{
-	float:right	}
-{{/section}}
-<div>
 
-<p id="result"></p>
-<form id="form">
+	#result{
+	 background-color: rgb(255 255 255 / 100%);
+	height:80%;
+	overflow:auto;
+	position: relative;
+	    display: flex;
+    flex-direction: column;
+	padding:5px;
 
+    width: 80%;
+        max-width: 700px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 10px #00000017;
+	}
+	#form{
+	/*width: 100%; */
+    width: 70%;
+    max-width: 490px;
+    /* align-self: auto; */
+    display: flex;
+    flex-direction: row;
+    /* align-items: center; */
+    justify-content: center;
+    /* gap: 10px; */
+    padding: 10px;
+    background-color: rgb(225 225 225);
+    border-radius: 0px 0px 10px 10px;
+	}
+	
+	.y, .m, .n{
+	box-shadow: 0px 0px 10px 1px #00000029;
+	    font-size: 15px;
+    border-radius: 10px;
+    max-width: 80%;
+    word-wrap: break-word;
+    padding: 7.5px;
+
+	  margin:5px;
+	}
+	
+		.y{
+		border-top-left-radius: 0px;
+	align-self: start;
+	  background-color:rgb(255 255 255 / 99%);
+}
+	
+	.m{
+	border-top-right-radius: 0px;
+	background-color: #d5f9fd;
+	align-self: end;
+	
+
+
+	}
+	
+	.n{
+
+	background-color: rgb(243 243 243 / 99%);
+	align-self: center;
+	}
+	
 
 	
+	</style>
+{{/section}}
+
+<div id="container">
+<div id="result">
+
+
+</div>
+
+<form id="form">
 </form>
+
+<div id="end">
+
+</div>
+
+
 </div>
 {{#section 'script'}}
 <script>
+	window.addEventListener('beforeunload',  () => {fetch('/api/bye', {method: 'post'}).then(() => {
+		
+	})
+	
+	
+	});
+
+
+	
 
 //verifica se o destino está pronto
 	{{#if message}}
 		if({{message}} == 1){
-		procuraParceiro()
-		}else{
-					document.getElementById('result').innerHTML = 'Você já está falando com alguém!'
+					document.getElementById('result').innerHTML += '<p class="n">Você já está falando com alguém! Diga oi!</p>'
 					document.getElementById('form').innerHTML = '<label>Mensagem:</label><input id="texto" name="texto" type="text"><input type="submit" value="enviar">'
-					procuraMensagens() 
+					document.getElementById('end').innerHTML ='<button onclick="end()">Encerrar conversa</button>'
+					procuraMensagens() //mensagens ativo
+		}else{
+					procuraParceiro() //parceiro ativo
 		}  
 	{{/if}}
 
-
-//mantém o user online
- function online(){
-	const headers = { 'Content-Type': 'application/json'}
-fetch('/api/online', {method: 'post', headers}).then(resp => {
-			if(resp.status <200 || resp.status >= 300){
-				console.log('falha na requisição...')
-				throw new Error(`Erro na requisição com o status: ${resp.status}`)
-				result.innerHTML = 'DEU ALGO ERRADO: '+err
-				online()
-				}
-			return resp.json()
-	}).then(json => {
-			console.log('ONLINE')
-			
-			if(json.envio == 1){
-						
-						document.getElementById('result').innerHTML = 'O chat foi encerrado... <a href="/chat">Iniciar de novo</a>'
-						document.getElementById('form').innerHTML = ''
-						
-					}else{
-					
-		online()}
-	
-	}).catch(err => {
-	result.innerHTML = 'DEU ALGO ERRADO: '+err
-	online()
-	})
-}
-online()
-
-
 //Procura algum parceiro disponivel
   function procuraParceiro() {
-	result.innerHTML = 'Procurando participante'
+	result.innerHTML = '<p class="n">Procurando participante...</p>'
 	const headers = { 'Content-Type': 'application/json'}
 	fetch('/loading', {method: 'post', headers}).then(
 		resp => {
@@ -74,52 +129,35 @@ online()
 					
 					 
 		}).then(json => {
+		console.log('procura parceiro!')
 					if(json.m == true){
-					console.log('procura parceiro!')
-					document.getElementById('result').innerHTML = 'Você já está falando com alguém!'
-					document.getElementById('form').innerHTML = '<label>Mensagem:</label><input id="texto" name="texto" type="text"><input type="submit" value="enviar">'
+					
+					document.getElementById('result').innerHTML = ''
+					document.getElementById('result').innerHTML += '<p class="n">Você já está falando com alguém! Diga oi!</p>'
+					document.getElementById('form').innerHTML = '<label>Mensagem:</label><input id="texto" name="texto" type="text"><input type="submit" value="enviar"><br> <button  onclick="end()">Encerrar conversa</button>'
 					procuraMensagens()
 					
 					
+					
+					}else{
+					if(json.m == 'erro') {
+					result.innerHTML = '<p class="n">O chat foi finalizado.</p><button onclick="novoChat()">Novo chat</button>'
+					document.getElementById('form').innerHTML = '<label>Mensagem:</label><input id="texto" name="texto" type="text"><input type="submit" value="enviar"><br> <button  onclick="end()">Encerrar conversa</button>'
 					}else{
 					procuraParceiro()
-					}
+					}}
 						})
 		.catch(err => { 
-		procuraParceiro()
+
 						console.log(err)
 	
 	
 	
 	})	}
 
-//enviar mensagem
-document.getElementById('form').addEventListener('submit', (evt) => {
-		evt.preventDefault()
-		const form = evt.target
-		const body = JSON.stringify({
-		texto: form.elements.texto.value,
-		})
-		const headers = { 'Content-Type': 'application/json'}
-		const result = document.getElementById('result')
-		
-		
-		fetch('/api/send', {method: 'post', body, headers}).then(
-		resp => {
-					return resp.json()
-					
-		}).then(json => {
-						document.getElementById('texto').value = ''
-						console.log('requisição de envio')
-						
-						})
-		.catch(err => {
-		console.log('requisição de envio')
-						result.innerHTML = 'DEU ALGO ERRADO: '+err
-						console.log('erro: '+err)
-	})
-	
-	})
+
+
+
 
 //procura mensagens
 	function procuraMensagens() {
@@ -128,32 +166,112 @@ document.getElementById('form').addEventListener('submit', (evt) => {
 	fetch('/api/resp', {method: 'post', headers}).then(
 		resp => {
 					return resp.json()
-					
+						console.log('procurando mensagens!')
 		}).then(json => {
-		console.log('procurando mensagens!')
-	if(json.envio == 1){
-						console.log('PARCEIRO OFFLINE')
-				
-					}else if(json.mensagem != undefined){
-					result.innerHTML += '<p>'+json.mensagem+'</p>'
+		
+		if(json.meOffline == true){
+		result.innerHTML = '<p class="n">O chat foi finalizado.</p><button onclick="novoChat()">Novo chat</button>'
+			end('abandono')
+			
+		}else{
+		
+		
+		if(json.offline == true){
+			result.innerHTML = '<p class="n">O chat foi finalizado.</p><button onclick="novoChat()">Novo chat</button>'
+			end('abandono')
+		}else{
+	
+			if(json.mensagem != undefined && json.mensagem != ''){
+					result.innerHTML += '<p class="y">'+json.mensagem+'</p>'
 					result.scrollTop = result.scrollHeight
-					procuraMensagens()}
-					else{
-					procuraMensagens()
-					}
-					})
+						console.log('procurando mensagens!')	}
+						
+				procuraMensagens()
+				
+			}}})
+				
+					
+					
 		.catch(err => { 
 						window.alert=err
 						console.log('REQUISIÇÂO NEGADA')
+							console.log('procurando mensagens!')
 	})
 	
 	
 	}
+
+
+
+//enviar mensagem
+var n = 0
+document.getElementById('form').addEventListener('submit', (evt) => {
+		evt.preventDefault()
+		const form = evt.target
+		const body = JSON.stringify({
+		texto: form.elements.texto.value,
+		})
+		const headers = { 'Content-Type': 'application/json'}
+		const result = document.getElementById('result')
+		const myResult = document.getElementById('result')
+		
+		
+		fetch('/api/send', {method: 'post', body, headers}).then(resp => {
+		
+		return resp.json()
+		}).then(json => {
+		if(document.getElementById('texto').value != ''){
+		myResult.innerHTML += '<p class="m">'+document.getElementById('texto').value+'</p>'
+						document.getElementById('texto').value = ''
+							result.scrollTop = result.scrollHeight
+						n++ 
+						}
+						}) 
 	
+	} 
+	)
+
 
 	
 
+	function end(a){
+
 	
+			fetch('/api/bye', {method: 'post'}).then(() => {
+			//result.innerHTML += '<button>Novo chat</button>'
+			
+		})
+		
+	}
+
+
+
+	function novoChat() {
+	const headers = { 'Content-Type': 'application/json'}
+	fetch('/api/chat2', {method: 'post', headers}).then(resp => {
+	console.log(resp.status)
+		return resp.json()
+		
+	}).then(json => {
+	
+	if(json.message == 1){
+					document.getElementById('result').innerHTML = '<p class="n">Você já está falando com alguém! Diga oi!</p>'
+			
+					procuraMensagens() //mensagens ativo
+		}else{
+					procuraParceiro() //parceiro ativo
+		}  
+	
+
+	}).catch((err) => {
+		console.log(err)
+	})
+	
+	}
+
+
+
+
 
 
 

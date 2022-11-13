@@ -6,19 +6,63 @@
 	
 <head>
 <style>
-	.flash{
+	*{
+	font-family: arial;
+	color: black;
+	}
+	
+	button>a{
+	font-size: 14px;
+	text-decoration: none;
+}
+
+	button{
+	
+		    width: fit-content;
+    padding: px;
+    
+	}
+	
+	body{
+	    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    margin: 0px;
+	 background-color: rgb(233 233 233 / 40%);
+	}
+
+	#logo{
+	margin-top: 0;
+		z-index: 2;
+	}
+
+	.flashSafe{
 		background-color: rgb(10,200,15);
 	}
+	
+	.flashDanger{
+	background-color: rgb(200,10,15);
+	}
+	
+	
+	
+	
 	{{{_sections.style}}}
 </style>
 {{#if flash}}
-	<div class="flash">
-		{{{flash}}}
+	<div class="{{flash.type}}">
+		{{{flash.message}}}
 	</div>
 {{/if}}
-	<body>
-	<h1><a href="/">CHAT</a></h1>
+	<body id="body">
+	<h1 id="logo"><a href="/">CHAT</a></h1>
 	{{{body}}}
 	</body>
+	
+	
+	
+	<script>
+	
+	</script>
 	{{{_sections.script}}}
-<html>
+<html> 
