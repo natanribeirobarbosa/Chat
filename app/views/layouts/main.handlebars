@@ -14,14 +14,35 @@
 	button>a{
 	font-size: 14px;
 	text-decoration: none;
+	padding: 10px;
+	height:100%;
+	width: 100%;
+	display: table-cell;
 }
-
-	button{
+	button.link{
+	padding: 0px;}
 	
+	
+	button{
+
 		    width: fit-content;
-    padding: px;
-    
+    padding: 5px;
+	    border-radius: 10px;
+    border: 1px solid silver;
+	box-shadow: 0px 5px 10px 1px #00000014;
+	transition: 200ms ease-in-out;
 	}
+	
+	button:hover{
+		
+		box-shadow: none;
+	}
+	
+	input[type='text']{
+		max-width:200px;
+		padding: 5px;
+		margin: 5px;
+}
 	
 	body{
 	    display: flex;
@@ -29,11 +50,40 @@
     padding: 10px;
     margin: 0px;
 	 background-color: rgb(233 233 233 / 40%);
+	 gap:5px;
 	}
 
 	#logo{
 	margin-top: 0;
 		z-index: 2;
+	}
+	
+	#flash2{
+		display: none;
+	}
+
+	.flash{
+		    position: absolute;
+    right: 0;
+    left: 0;
+    margin: auto;
+    width: 90%;
+	background-image: linear-gradient(45deg, #e0e0e0, #4e4e4e99);
+    font-weight: bold;
+    border: 1px solid #00000017;
+    border-radius: 20px;
+	box-shadow: 0px 0px 10px 10px #00000017;
+    padding: 10px;
+    z-index: 3;
+	animation-name: flash;
+  animation-duration: 5s;
+  animation-delay: 5s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+	}
+	
+	.flash> h1{
+		font-size: 20px;
 	}
 
 	.flashSafe{
@@ -41,19 +91,39 @@
 	}
 	
 	.flashDanger{
-	background-color: rgb(200,10,15);
+	background-image: linear-gradient(#ffcdcd, #ffb3b3,#ff9090);
 	}
 	
-	
+	@keyframes flash{
+		0%{ opacity:100%;}
+		90%{ opacity:0%;
+			z-index:3;
+		}
+		100%{
+		opacity:0%;
+		z-index:-1;
+		}
+	}
 	
 	
 	{{{_sections.style}}}
 </style>
 {{#if flash}}
-	<div class="{{flash.type}}">
-		{{{flash.message}}}
-	</div>
+
+
+	<!--<div id = "flash" class="{{flash.type}} flash" >-->
+		<script>
+		window.alert('{{flash}}')
+		</script>
+	<!--</div>-->
+	
+	
 {{/if}}
+
+		<div id = "flash2" class="flash" >
+		
+	</div>
+
 	<body id="body">
 	<h1 id="logo"><a href="/">CHAT</a></h1>
 	{{{body}}}
@@ -62,6 +132,8 @@
 	
 	
 	<script>
+	
+		
 	
 	</script>
 	{{{_sections.script}}}

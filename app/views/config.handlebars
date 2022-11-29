@@ -1,0 +1,62 @@
+
+
+
+
+<label for="texto">Seu nome:</label>
+<input id="nome" name="nome" type="text"><br>
+
+<div><button onclick="salvar()">Salvar</button><span id="result" style="color: green;"></span></div>
+
+
+
+
+{{#section 'script'}}
+<script>
+// Cria uma nova data no futuro 01/01/2020
+var data = new Date(2025,0,01);
+// Converte a data para GMT
+// Wed, 01 Jan 2020 02:00:00 GMT
+data = data.toGMTString();
+
+document.getElementById('nome').value = valor_cookie('myName')
+
+function salvar(){
+// Cria o cookie
+	document.cookie = 'myName='+document.getElementById('nome').value+'; expires=' + data + ';';
+	document.getElementById('result').innerText = ' Salvo!'
+	setTimeout(() => {document.getElementById('result').innerText = ""}, 1000)
+}
+
+
+
+
+
+
+function valor_cookie(nome_cookie) {
+    // Adiciona o sinal de = na frente do nome do cookie
+    var cname = ' ' + nome_cookie + '=';
+    
+    // Obtém todos os cookies do documento
+    var cookies = document.cookie;
+    
+    // Verifica se seu cookie existe
+    if (cookies.indexOf(cname) == -1) {
+        return '';
+    }
+    
+    // Remove a parte que não interessa dos cookies
+    cookies = cookies.substr(cookies.indexOf(cname), cookies.length);
+
+    // Obtém o valor do cookie até o ;
+    if (cookies.indexOf(';') != -1) {
+        cookies = cookies.substr(0, cookies.indexOf(';'));
+    }
+    
+    // Remove o nome do cookie e o sinal de =
+    cookies = cookies.split('=')[1];
+    
+    // Retorna apenas o valor do cookie
+    return decodeURI(cookies);
+}
+</script>
+{{/section }}
