@@ -225,14 +225,14 @@ blacklistfunc2()
 			blacklist2.splice(index, 1)
 
 }
-console.log('Varredura completa! Usuarios online: '+online+', blacklist: '+blacklist2)
+console.log('Varredura completa! Usuarios online: '+online+', blacklist2: '+blacklist2)
 	for(let index2 = 0; index2 < online.length; index2++){
 
 		var user2 = online[index2]
 		blacklist2.push(user2)
 
 	} 
-			console.log('Escrita completa! Usuarios online: '+online+', blacklist: '+blacklist2)
+			console.log('Escrita completa! Usuarios online: '+online+', blacklist2: '+blacklist2)
 
 			setTimeout(blacklistfunc2, 10000)
 }
