@@ -321,8 +321,8 @@ if(contatos.indexOf(id)/*()*/ == -1){
 	contatos = JSON.stringify(contatos)
 	nomes = JSON.stringify(nomes)
 	
-	document.cookie = 'contatos='+contatos
-	document.cookie = 'nomes='+nomes
+	document.cookie = 'contatos='+contatos+'; expires=' + data + ';';
+	document.cookie = 'nomes='+nomes+'; expires=' + data + ';';
 	window.alert('Contato salvo com sucesso!!')
 	
 

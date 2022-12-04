@@ -78,7 +78,8 @@ var c;
 	})
 	}
 	res.render('index', {cont: c})
-	console.log('online users: '+onlineUsers+online)
+	console.log('online users: '+onlineUsers+online+'mensagens: ')
+
 })
    
    app.get('/chat/:nome', (req, res) => {
@@ -86,16 +87,25 @@ var c;
 		online.push(req.session.name)
 		
 	}
+	
+	if(onlineUsers.indexOf(req.session.name)  != -1){
+				onlineUsers.splice(onlineUsers.indexOf(req.session.name), 1)
+				//onlineUsers.splice(pos, 1)
+				req.session.flash = 'Feche a outra conversa ou espere alguns segundos e tente novamente!'
+				res.redirect('/')
+			
+		}else{
+				onlineUsers.push(req.session.name) 
 	var n = parseInt(req.params.nome)
 	   console.log(online.indexOf())
 	   
 	   if(online.indexOf(n) != -1){
-	   res.render('chat',{contato: n,message: true})
+	   res.render('chat2',{contato: n,message: true})
 	   }else{
 		   req.session.flash = 'Este úsuario: '+req.params.nome+' não está online no momento!'+online
 				res.redirect('/')
 	   }
-	   
+		}
    })
 
  app.get('/config', (req, res) => {
@@ -103,6 +113,10 @@ var c;
  }) 
    
 app.get('/chat',  (req, res) => { 
+	   	if(online.indexOf(req.session.name) == -1){
+		online.push(req.session.name)
+		
+	}
 	if(req.session.name == null){//Recebe um novo id caso seja sua primeira vez no site
 		id++ 
 		req.session.name = id
@@ -110,6 +124,7 @@ app.get('/chat',  (req, res) => {
 		}
 		if(onlineUsers.indexOf(req.session.name)  != -1){
 				//onlineUsers.splice(onlineUsers.indexOf(req.session.name), 1)
+				onlineUsers.splice(pos, 1)
 				req.session.flash = 'Feche a outra conversa ou espere alguns segundos e tente novamente!'
 				res.redirect('/')
 			
@@ -209,6 +224,7 @@ app.get('/contatos/:nome', (req, res) => {
 		
 		res.render('chat', {message: 1, nome: names[req.session.dest], id: dest})
 	}
+	
 })
 
 blacklistfunc()
@@ -270,6 +286,14 @@ app.post('/api/send', (req, res) => {
 	
 	}
 })  
+
+app.post('/sol/:contato', (req, res) => {
+	if(sol[req.params.contato] == undefined){
+		sol[req.params.contato] = []
+	}
+	sol[req.params.contato].push(req.body.texto)
+	
+})
  
 app.post('/api/resp', (req, res) => {
 
@@ -315,6 +339,10 @@ app.post('/api/resp', (req, res) => {
 	}}
 
 })   
+
+app.post('/api/resp2', (req, res) => {
+	res.send('sucesso.')
+})
  
    
  app.post('/loading', (req, res) =>{
@@ -353,7 +381,7 @@ app.post('/api/resp', (req, res) => {
  app.post('/api/bye', (req, res) => {
 	var pos = onlineUsers.indexOf(req.session.name)
 	
-	mensagens[req.session.name] = undefined
+	mensagens[req.session.name] = []
 
 	if(pos == -1){
 		res.end()
