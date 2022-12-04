@@ -2,11 +2,13 @@
 const express = require('express')
 const app = express()
 const flash = require('./lib/middleware/flash')
+  const path = require('path')
 
 const port = process.env.PORT || 3000
 const { credentials } = require('./config')
 
 //definindo o renderizador padrão 
+app.set('views', path.join(__dirname, 'views'));
 const handleBars = require('express-handlebars');
 app.engine('handlebars', handleBars.engine({
 	dafaultLayout: 'main',
@@ -46,30 +48,29 @@ var id = 0
 var mensagens = {}
 
 var onlineUsers = []
-var online = []
+var online = [-1]
 
 var sol = {} //guarda as solicitações e as mensagens de cada solicitação
 
 var names = {}
 
 var blacklist = []
-var blacklist2 = []
+//var blacklist2 = []
 
 app.get('/', (req, res) => {
 	
-online.push(req.session.name)
-
+	if(online.indexOf(req.session.name) == -1){
+		online.push(req.session.name)
+		
+	}
+var c;
 	if(req.cookies.contatos != null){
-			var c = JSON.parse(req.cookies.contatos)
+		c = JSON.parse(req.cookies.contatos)
 	var n = 0
 	c.map((i) => {
-		if(onlineUsers.indexOf(i) == -1){
 				if(online.indexOf(i) == -1){
 					c[n] = false	
-				n++}else{
-					c[n] = true
-			n++
-				}
+				
 		}else{
 			c[n] = true
 			n++
@@ -77,9 +78,26 @@ online.push(req.session.name)
 	})
 	}
 	res.render('index', {cont: c})
-	console.log('online users: '+onlineUsers+', Blacklist: '+blacklist+', mesagens: '+JSON.stringify(mensagens)+'names: '+JSON.stringify(names))
+	console.log('online users: '+onlineUsers+online)
 })
    
+   app.get('/chat/:nome', (req, res) => {
+	   	if(online.indexOf(req.session.name) == -1){
+		online.push(req.session.name)
+		
+	}
+	var n = parseInt(req.params.nome)
+	   console.log(online.indexOf())
+	   
+	   if(online.indexOf(n) != -1){
+	   res.render('chat',{contato: n,message: true})
+	   }else{
+		   req.session.flash = 'Este úsuario: '+req.params.nome+' não está online no momento!'+online
+				res.redirect('/')
+	   }
+	   
+   })
+
  app.get('/config', (req, res) => {
 	 res.render('config')
  }) 
@@ -200,6 +218,7 @@ blacklistfunc()
 			var user = blacklist[index]
 
 			onlineUsers.splice(onlineUsers.indexOf(user), 1)
+			online.splice(online.indexOf(user), 1)
 			blacklist.splice(index, 1)
 
 }
@@ -210,11 +229,11 @@ console.log('Varredura completa! Usuarios online: '+onlineUsers+', blacklist: '+
 		blacklist.push(user2)
 
 	} 
-			console.log('Escrita completa! Usuarios online: '+onlineUsers+', blacklist: '+blacklist)
+			console.log('Escrita completa! Usuarios online: '+onlineUsers+online+', blacklist: '+blacklist)
 
-			setTimeout(blacklistfunc, 10000)
+			setTimeout(blacklistfunc, 3000)
 }
-
+/*
 blacklistfunc2()
  function blacklistfunc2(){ 
 
@@ -235,7 +254,7 @@ console.log('Varredura completa! Usuarios online: '+online+', blacklist2: '+blac
 			console.log('Escrita completa! Usuarios online: '+online+', blacklist2: '+blacklist2)
 
 			setTimeout(blacklistfunc2, 10000)
-}
+}*/
  
 app.post('/api/send', (req, res) => { 
 	if(typeof(req.body.texto) != String){
@@ -253,8 +272,7 @@ app.post('/api/send', (req, res) => {
 })  
  
 app.post('/api/resp', (req, res) => {
-	//console.log('destino: '+onlineUsers.indexOf(req.session.dest))
-	//console.log(onlineUsers.indexOf(req.session.dest))
+
 	
 	
 	if(blacklist.indexOf(req.session.name) != -1){
@@ -342,7 +360,7 @@ app.post('/api/resp', (req, res) => {
 	}else{
 	 onlineUsers.splice(pos, 1)
 	 	delete names[req.session.name]
-	  console.log("o user: "+req.session.name+" saiu! úsuarios online agora: "+onlineUsers, pos)
+	  console.log("o user: "+req.session.name+" saiu! úsuarios online agora: "+onlineUsers)
 	res.end()
 	
 	}
@@ -356,7 +374,7 @@ app.post('/api/resp', (req, res) => {
 	if(pos == -1 || pos == undefined){
 		res.end()
 	}else{
-		onlineUsers.splice(pos, 1)
+		online.splice(pos, 1)
 	 	delete names[req.session.name]
 		console.log("o user: "+req.session.name+" saiu! úsuarios online agora: "+onlineUsers, pos)
 		res.end()
