@@ -40,27 +40,33 @@ app.use(expressSession({
 	maxAge: 30 * 24 * 60 * 60 * 1000
 }))
   
+  
+  
 //definindo o middleware de mensagens flash
 app.use(flash)
 
+
+
+//rotas
+var chat = require('./rotas/random')
  
 var id = 0
 var mensagens = {}
 
-var onlineUsers = []
-var online = [-1]
+
+
 
 var sol = {} //guarda as solicitações e as mensagens de cada solicitação
 
 var names = {}
 
-var blacklist = []
+
 //var blacklist2 = []
 
 app.get('/', (req, res) => {
 	
-	if(online.indexOf(req.session.name) == -1){
-		online.push(req.session.name)
+	if(chat.online.indexOf(req.session.name) == -1){
+		chat.online.push(req.session.name)
 		
 	}
 var c;
@@ -78,7 +84,7 @@ var c;
 	})
 	}
 	res.render('index', {cont: c})
-	console.log('online users: '+onlineUsers+online+'mensagens: ')
+
 
 })
    
@@ -97,7 +103,7 @@ var c;
 		}else{
 				onlineUsers.push(req.session.name) 
 	var n = parseInt(req.params.nome)
-	   console.log(online.indexOf())
+	
 	   
 	   if(online.indexOf(n) != -1){
 	   res.render('chat2',{contato: n,message: true})
@@ -112,58 +118,13 @@ var c;
 	 res.render('config')
  }) 
    
-app.get('/chat',  (req, res) => { 
-	   	if(online.indexOf(req.session.name) == -1){
-		online.push(req.session.name)
-		
-	}
-	if(req.session.name == null){//Recebe um novo id caso seja sua primeira vez no site
-		id++ 
-		req.session.name = id
-		
-		}
-		if(onlineUsers.indexOf(req.session.name)  != -1){
-				//onlineUsers.splice(onlineUsers.indexOf(req.session.name), 1)
-				onlineUsers.splice(pos, 1)
-				req.session.flash = 'Feche a outra conversa ou espere alguns segundos e tente novamente!'
-				res.redirect('/')
-			
-		}else{
-				onlineUsers.push(req.session.name) 
-			if(req.cookies.myName != undefined){
-					names[req.session.name] = req.cookies.myName
-				}else{
-					names[req.session.name] = ''
-				}
-
-				
-		var user = {id: req.session.name,
-							position: onlineUsers.indexOf(req.session.name)
-							} 
-							
-		 
-	mensagens[user.id] = []
-		 
-		if(user.position % 2 != 0){//A posição do úsuario no array é impar? se sim,  seu destino é uma posição atrás no array
-			var i =  user.position-1
-			user.dest = onlineUsers[i]
-			req.session.dest = user.dest
-			res.render('chat', {message: 1, nome: names[req.session.dest], id: req.session.dest})
-			
-		}else{	//Você é par,  Seu destino estará uma casa a frente...
-			req.session.dest = user.position+1
-			res.render('chat', {message: 2, id: -1}) 
-		}
-	
-	console.log('"/" usuario '+req.session.name+' acabou de entrar, destino: '+req.session.dest+', variavel id:'+id+', usuarios online: '+JSON.stringify(onlineUsers))
-	
-		}})  
+app.get('/chat',  chat.chat)  
 
 
 
 app.post('/api/chat2', (req, res) => { 
 	if(req.session.name == null){//envia erro caso o user não tenha vindo de outra conversa
-	console.log('requisição feita!')
+
 		res.send({erro: true})
 		res.end()
 		
@@ -197,7 +158,7 @@ app.post('/api/chat2', (req, res) => {
 			req.session.dest = user.dest
 			res.send({message: 1, nome: names[req.session.dest], id: req.session.dest})  
 			res.end()
-			console.log('chegou até aqui!1')
+		
 			
 			
 		}else{	//Você é par,  Seu destino estará uma casa a frente...
@@ -205,7 +166,7 @@ app.post('/api/chat2', (req, res) => {
 			res.cookie('dest', user.position+1)
 			res.send({message: 2, id: -1}) 
 			res.end() 
-			console.log('chegou até aqui!2')
+	
 		}
 
 	 
@@ -227,28 +188,7 @@ app.get('/contatos/:nome', (req, res) => {
 	
 })
 
-blacklistfunc()
- function blacklistfunc(){ 
 
-	 for(let index = 0; index < blacklist.length; index++){
-			var user = blacklist[index]
-
-			onlineUsers.splice(onlineUsers.indexOf(user), 1)
-			online.splice(online.indexOf(user), 1)
-			blacklist.splice(index, 1)
-
-}
-console.log('Varredura completa! Usuarios online: '+onlineUsers+', blacklist: '+blacklist)
-	for(let index2 = 0; index2 < onlineUsers.length; index2++){
-
-		var user2 = onlineUsers[index2]
-		blacklist.push(user2)
-
-	} 
-			console.log('Escrita completa! Usuarios online: '+onlineUsers+online+', blacklist: '+blacklist)
-
-			setTimeout(blacklistfunc, 3000)
-}
 /*
 blacklistfunc2()
  function blacklistfunc2(){ 
@@ -388,7 +328,7 @@ app.post('/api/resp2', (req, res) => {
 	}else{
 	 onlineUsers.splice(pos, 1)
 	 	delete names[req.session.name]
-	  console.log("o user: "+req.session.name+" saiu! úsuarios online agora: "+onlineUsers)
+	
 	res.end()
 	
 	}
