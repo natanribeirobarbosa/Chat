@@ -1,4 +1,3 @@
-
 const express = require('express')
 const app = express()
 const flash = require('./lib/middleware/flash')
