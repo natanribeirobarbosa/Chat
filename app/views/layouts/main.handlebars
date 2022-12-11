@@ -72,7 +72,7 @@
     left: 0;
     margin: auto;
     width: 90%;
-	background-image: linear-gradient(45deg, #e0e0e0, #4e4e4e99);
+	background-color: white;
     font-weight: bold;
     border: 1px solid #00000017;
     border-radius: 20px;
@@ -112,21 +112,62 @@
 	
 	{{{_sections.style}}}
 </style>
+	<script>
+	
+	function fechar(){
+		document.getElementById('flash').style.display= "none"
+	}
+	
+function valor_cookie(nome_cookie) {
+    // Adiciona o sinal de = na frente do nome do cookie
+    var cname =nome_cookie  + '=';
+    
+    // Obtém todos os cookies do documento
+    var cookies = document.cookie;
+    
+    // Verifica se seu cookie existe
+    if (cookies.indexOf(cname) == -1) {
+        return false;
+    }
+    
+    // Remove a parte que não interessa dos cookies
+    cookies = cookies.substr(cookies.indexOf(cname), cookies.length);
+
+    // Obtém o valor do cookie até o ;
+    if (cookies.indexOf(';') != -1) {
+        cookies = cookies.substr(0, cookies.indexOf(';'));
+    }
+    
+    // Remove o nome do cookie e o sinal de =
+    cookies = cookies.split('=')[1];
+    
+    // Retorna apenas o valor do cookie
+    return decodeURI(cookies);
+}
+		
+	
+	</script>
+
 {{#if flash}}
 
 
-	<!--<div id = "flash" class="{{flash.type}} flash" >-->
-		<script>
-		window.alert('{{flash}}')
+
+		
+	<div id="flash" class="flash">
+
+	<div class="{{flash.type}}">
+		{{{flash.message}}}
+	</div>
+
+		</div>	<!--<script>
+		window.alert('{{flash.type}}')
 		</script>
-	<!--</div>-->
-	
+-->
+		
+
+
 	
 {{/if}}
-
-		<div id = "flash2" class="flash" >
-		
-	</div>
 
 	<body id="body">
 	<h1 id="logo"><a href="/">CHAT</a></h1>
@@ -135,10 +176,6 @@
 	
 	
 	
-	<script>
-	
-		
-	
-	</script>
+
 	{{{_sections.script}}}
 <html> 

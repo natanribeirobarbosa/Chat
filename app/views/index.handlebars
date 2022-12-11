@@ -58,6 +58,8 @@ data = data.toGMTString();
 	var nomes = JSON.parse(valor_cookie('nomes'))
 	var contatos = JSON.parse(valor_cookie('contatos'))
 	var vetor = [{{cont}}]
+	var vetor 2 = [{{msgs}}]
+	console.log(vetor)
 	var n = 0
 	vetor.map((i) => {
 		if(i == true){
@@ -65,10 +67,36 @@ data = data.toGMTString();
 		}else{
 			i = ''
 		}
-		document.getElementById('contatos').innerHTML += '<li><a href="/chat/'+contatos[n]+'">'+nomes[n]+' '+i+'</a></li>'
+	
+		document.getElementById('contatos').innerHTML += '<li id="'+contatos[n]+'"><a href="/chat/'+contatos[n]+'">'+nomes[n]+' '+i+' '+i2+'</a></li>'
 		n++
 	})
+var lista = document.querySelectorAll('ul#contatos li')	
+		vetor2.map((i) => {
+		if(i == true){
+			document.getElementById('') = '<span style = "color:red;">novas mensagens!</span>'
+		}else{
+			i2 = ''
+		}
+	})
 </script>
+
+{{#if msgs}}
+	<script>
+	var mensagens = [{{msgs}}]
+		var contatos = document.querySelectorAll('ul#contatos li')
+		for (var i = 0; mensagens.length > i; i++) {
+		
+		for(var i2 = 0; contatos.length > i2, i2++){
+			if(('id="'+mensagens[i]+'"') == contatos[i2]){
+				document.getElementById(i2).innerHTML = "novas mensagens!"
+			}
+		}
+   if(constatos[i].attributes.id == '')
+   
+}
+	</script>
+{{/if}}
 
 
 <!--{{> widget}}

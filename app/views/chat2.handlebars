@@ -95,7 +95,7 @@
 
 <div id="container">
 <div id="contato">
-<h1 id="nome">vsvvf</h1>
+<h1 id="nome"></h1>
 </div>
 <div id="result">
 
@@ -120,65 +120,9 @@
 	
 	
 	});
-
-
 	
-
-//verifica se o destino está pronto
-/*	{{#if message}}
-		if({{message}} == 1){
-					document.getElementById('result').innerHTML += '<p class="n">Você já está falando com alguém! Diga oi!</p>'
-					document.getElementById('form').innerHTML = '<div><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div><button onclick="end()">Encerrar conversa</button><button onclick="salvar()">Salvar contato</button>'
-					document.getElementById('nome').innerHTML ='{{nome}}'
-					
-					procuraMensagens() //mensagens ativo
-		}else{
-					procuraParceiro() //parceiro ativo
-		}  
-	{{/if}}*//*
-	
-var id ={{id}}
-//Procura algum parceiro disponivel
-  function procuraParceiro() {
-	result.innerHTML = '<p class="n">Procurando participante...</p>'
-	const headers = { 'Content-Type': 'application/json'}
-	fetch('/loading', {method: 'post', headers}).then(
-		resp => {
-				 
-					return resp.json()
-					
-					  
-		}).then(json => {
-		console.log('procura parceiro!')
-					if(json.m == true){
-					
-					document.getElementById('result').innerHTML = ''
-					document.getElementById('result').innerHTML += '<p class="n">Você já está falando com alguém! Diga oi!</p>'
-					document.getElementById('form').innerHTML = '<div><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div> <button  onclick="end()">Encerrar conversa</button><button onclick="salvar()">Salvar contato</button>'
-					document.getElementById('nome').innerHTML = json.nome
-					id = json.id;
-					procuraMensagens()
-					
-					
-					
-					}else{/ 
-					if(json.m == 'erro') {
-					result.innerHTML = '<p class="n">O chat foi finalizado.</p><button onclick="novoChat()">Novo chat</button>'
-					document.getElementById('form').innerHTML = '<div><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div> <button  onclick="end()">Encerrar conversa</button><button onclick="salvar()">Salvar contato</button>'
-					
-					}else{
-					procuraParceiro()
-					}}
-						})
-		.catch(err => { 
-
-						console.log(err)
-	
-	
-	
-	})	}
-*/
-
+var contato = {{contato}}
+var nome = '{{nome}}'
 
 					document.getElementById('form').innerHTML = '<div><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div> <button  onclick="end()">Encerrar conversa</button><button onclick="salvar()">Salvar contato</button>'
 					var n =  JSON.parse(valor_cookie('nomes')) 
@@ -186,7 +130,12 @@ var id ={{id}}
 			
 					console.log(n[0])
 					var contato = c.indexOf({{contato}})
+					if(contato != -1){
 					document.getElementById('nome').innerHTML =  n[contato]
+					}else{
+					document.getElementById('nome').innerHTML =  nome
+					}
+					
 				
 					procuraMensagens()
  
@@ -248,7 +197,7 @@ document.getElementById('form').addEventListener('submit', (evt) => {
 		const myResult = document.getElementById('result')
 		
 		
-		fetch('/sol/'+{{contato}}, {method: 'post', body, headers}).then(resp => {
+		fetch('/sol/'+contato, {method: 'post', body, headers}).then(resp => {
 		
 		return resp.json()
 		}).then(json => {
@@ -264,43 +213,6 @@ document.getElementById('form').addEventListener('submit', (evt) => {
 	)
 
 
-	
-/*
-	function end(a){
-
-	
-			fetch('/api/bye', {method: 'post'}).then(() => {
-			//result.innerHTML += '<button>Novo chat</button>'
-			
-		})
-		
-	}*/
-
-
-/*
-	function novoChat() {
-	const headers = { 'Content-Type': 'application/json'}
-	fetch('/api/chat2', {method: 'post', headers}).then(resp => {
-	console.log(resp.status)
-		return resp.json()
-		
-	}).then(json => {
-	
-	if(json.message == 1){
-					document.getElementById('result').innerHTML = '<p class="n">Você já está falando com alguém! Diga oi!</p>'
-					document.getElementById('nome').innerHTML = json.nome
-			
-					procuraMensagens() //mensagens ativo
-		}else{
-					procuraParceiro() //parceiro ativo
-		}  
-	
-
-	}).catch((err) => {
-		console.log(err)
-	})
-	
-	}*/
 
 
 	
@@ -343,8 +255,8 @@ if(contatos.indexOf(id)/*()*/ == -1){
 	
 }
 
-
 }
+
 
 function valor_cookie(nome_cookie) {
     // Adiciona o sinal de = na frente do nome do cookie

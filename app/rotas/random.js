@@ -1,31 +1,29 @@
-var online = [-1]
-var onlineUsers = []
-var blacklist = []
 
+/*
 blacklistfunc()
  function blacklistfunc(){ 
 
-	 for(let index = 0; index < blacklist.length; index++){
-			var user = blacklist[index]
+	 for(let index = 0; index < variaveis.blacklist.length; index++){
+			var user = variaveis.blacklist[index]
 
 			onlineUsers.splice(onlineUsers.indexOf(user), 1)
 			online.splice(online.indexOf(user), 1)
-			blacklist.splice(index, 1)
+			variaveis.blacklist.splice(index, 1)
 
 }
-console.log('Varredura completa! Usuarios online: '+onlineUsers+', blacklist: '+blacklist)
+console.log('Varredura completa! Usuarios online: '+onlineUsers+', blacklist: '+variaveis.blacklist)
 	for(let index2 = 0; index2 < onlineUsers.length; index2++){
 
 		var user2 = onlineUsers[index2]
-		blacklist.push(user2)
+		variaveis.blacklist.push(user2)
 
 	} 
-			console.log('Escrita completa! Usuarios online: '+onlineUsers+online+', blacklist: '+blacklist)
+			console.log('Escrita completa! Usuarios online: '+onlineUsers+online+', blacklist: '+variaveis.blacklist)
 
 			setTimeout(blacklistfunc, 3000)
-}
-
-var chat = (req, res) => {
+}*/
+/*
+var chat =(req, res) => {
 	   	if(online.indexOf(req.session.name) == -1){
 		online.push(req.session.name)
 		
@@ -73,4 +71,4 @@ var chat = (req, res) => {
 		
 }}
 
-module.exports = {chat, onlineUsers, online}
+module.exports = {chat, blacklist}*/

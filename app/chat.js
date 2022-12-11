@@ -3,7 +3,7 @@ const app = express()
 const flash = require('./lib/middleware/flash')
   const path = require('path')
 
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 8080
 const { credentials } = require('./config')
 
 //definindo o renderizador padrão 
@@ -41,49 +41,78 @@ app.use(expressSession({
   
   
   
-//definindo o middleware de mensagens flash
-app.use(flash)
+
 
 
 
 //rotas
 var chat = require('./rotas/random')
+console.log(chat)
  
 var id = 0
 var mensagens = {}
-
-
-
+var online = [-1]
+var onlineUsers = []
+var blacklist = []
+var a = {id, mensagens, online, onlineUsers, blacklist}
+module.exports = {id}
 
 var sol = {} //guarda as solicitações e as mensagens de cada solicitação
-
+ 
 var names = {}
 
+//definindo o middleware de mensagens flash
+app.use(flash)
 
 //var blacklist2 = []
 
 app.get('/', (req, res) => {
-	
-	if(chat.online.indexOf(req.session.name) == -1){
-		chat.online.push(req.session.name)
+console.log(req.session.name)
+		if(req.session.name == undefined){//Recebe um novo id caso seja sua primeira vez no site
+		id++ 
+		req.session.name = id
 		
+		}
+	
+	   	if(online.indexOf(req.session.name) == -1){
+		online.push(req.session.name)
+
 	}
 var c;
 	if(req.cookies.contatos != null){
 		c = JSON.parse(req.cookies.contatos)
 	var n = 0
 	c.map((i) => {
-				if(online.indexOf(i) == -1){
+				if(online.indexOf(c[n]) == -1){
 					c[n] = false	
+					n++
 				
 		}else{
 			c[n] = true
 			n++
-		}
+		} 
 	})
 	}
-	res.render('index', {cont: c})
+	
+	if(sol[req.session.name] != undefined){
+		var users = sol[req.session.name]
 
+		console.log(users)
+	res.locals.flash = {
+ type: 'main',
+ message: 'Alguem enviou uma mensagem!',
+ };
+ res.locals.msgs = sol[req.session.name]
+
+		sol[req.session.name] = undefined 
+	
+		
+	}else{
+		var flash2 = false
+		
+	}
+	res.render('index', {cont: c})
+	console.log(online+' solicitações: '+JSON.stringify(sol))
 
 })
    
@@ -96,28 +125,90 @@ var c;
 	if(onlineUsers.indexOf(req.session.name)  != -1){
 				onlineUsers.splice(onlineUsers.indexOf(req.session.name), 1)
 				//onlineUsers.splice(pos, 1)
-				req.session.flash = 'Feche a outra conversa ou espere alguns segundos e tente novamente!'
-				res.redirect('/')
+				//req.session.flash = {message:'Feche a outra conversa ou espere alguns segundos e tente novamente!', type:"main"}
+				//console.log('o usuario'+req.params.nome+'não está ati')					
+				//res.redirect('/')
 			
 		}else{
-				onlineUsers.push(req.session.name) 
-	var n = parseInt(req.params.nome)
-	
+		
+				
+		var n = parseInt(req.params.nome)
+		var nome;
 	   
 	   if(online.indexOf(n) != -1){
-	   res.render('chat2',{contato: n,message: true})
+		   if(names[n] != undefined){
+		
+				   nome = names[n]
+			   
+			   
+		   }
+		   
+		     
+	   res.render('chat2',{contato: n, message: true, nome: nome})
+	
 	   }else{
-		   req.session.flash = 'Este úsuario: '+req.params.nome+' não está online no momento!'+online
-				res.redirect('/')
-	   }
+		 	req.session.flash = {
+ type: 'main',
+ message: 'Este úsuario não está ativo no momento!',
+ };
+ res.redirect(303, '/');
+}
 		}
    })
 
  app.get('/config', (req, res) => {
-	 res.render('config')
+
  }) 
    
-app.get('/chat',  chat.chat)  
+app.get('/chat',  (req, res) => {
+		if(req.session.name == null){//Recebe um novo id caso seja sua primeira vez no site
+		id++ 
+		req.session.name = id
+		
+		}
+	
+	   	if(online.indexOf(req.session.name) == -1){
+		online.push(req.session.name)
+
+	}
+
+		if(onlineUsers.indexOf(req.session.name)  != -1){
+				//onlineUsers.splice(onlineUsers.indexOf(req.session.name), 1)
+				onlineUsers.splice(onlineUsers.indexOf(req.session.name), 1)
+				req.session.flash = {message:'E"><a style="padding: inherit;">dispensar</a></button>', type:"main"} 
+				res.redirect('/')
+			
+		}else{
+				onlineUsers.push(req.session.name) 
+			if(req.cookies.myName != undefined){
+					names[req.session.name] = req.cookies.myName
+				}else{
+					names[req.session.name] = undefined
+				}
+
+				
+		var user = {id: req.session.name,
+							position: onlineUsers.indexOf(req.session.name)
+							} 
+							
+		 
+	mensagens[user.id] = []
+		 
+		if(user.position % 2 != 0){//A posição do úsuario no array é impar? se sim,  seu destino é uma posição atrás no array
+			var i =  user.position-1
+			user.dest = onlineUsers[i]
+			req.session.dest = user.dest
+			res.render('chat', {message: 1, nome: names[req.session.dest], id: req.session.dest})
+			
+		}else{	//Você é par,  Seu destino estará uma casa a frente...
+			req.session.dest = user.position+1
+			res.render('chat', {message: 2, id: -1}) 
+		}
+	
+	console.log('"/" usuario '+req.session.name+' acabou de entrar, destino: '+req.session.dest+', variavel id:'+id+', usuarios online: '+JSON.stringify(onlineUsers))
+	
+		
+}})  
 
 
 
@@ -173,43 +264,31 @@ app.post('/api/chat2', (req, res) => {
 		}
 		})  
 
-app.get('/contatos/:nome', (req, res) => {
-	req.session.dest = parseInt(req.params.nome) 
-	
-	if(onlineUsers.indexOf(dest) == -1){
-		req.session.flash = 'Este contato não está online no momento!'+onlineUsers+', '+dest
-	
-				res.redirect('/')
-	}else{
-		
-		res.render('chat', {message: 1, nome: names[req.session.dest], id: dest})
-	}
-	
-})
 
 
-/*
-blacklistfunc2()
- function blacklistfunc2(){ 
 
-	 for(let index = 0; index < blacklist2.length; index++){
-			var user = blacklist2[index]
+blacklistfunc()
+ function blacklistfunc(){ 
 
-			online.splice(online.indexOf(user), 1)
-			blacklist2.splice(index, 1)
+	 for(let index = 0; index < blacklist.length; index++){
+			var user = blacklist[index]
+
+			onlineUsers.splice(onlineUsers.indexOf(user), 1)
+			//online.splice(online.indexOf(user), 1)
+			blacklist.splice(index, 1)
 
 }
-console.log('Varredura completa! Usuarios online: '+online+', blacklist2: '+blacklist2)
-	for(let index2 = 0; index2 < online.length; index2++){
 
-		var user2 = online[index2]
-		blacklist2.push(user2)
+	for(let index2 = 0; index2 < onlineUsers.length; index2++){
+
+		var user2 = onlineUsers[index2]
+		blacklist.push(user2)
 
 	} 
-			console.log('Escrita completa! Usuarios online: '+online+', blacklist2: '+blacklist2)
+	
 
-			setTimeout(blacklistfunc2, 10000)
-}*/
+			setTimeout(blacklistfunc, 3000)
+}
  
 app.post('/api/send', (req, res) => { 
 	if(typeof(req.body.texto) != String){
@@ -223,15 +302,30 @@ app.post('/api/send', (req, res) => {
 	res.send({sended: req.body.texto})
 	res.end()
 	
-	}
-})  
+	}  
+})   
 
 app.post('/sol/:contato', (req, res) => {
+	if(online[req.params.contato] == undefined){
+			req.session.flash = {
+ type: 'main',
+ message: 'The email address you entered was not valid.',
+ };
+	res.send({sucess: false})
+		
+	}else{
+	
 	if(sol[req.params.contato] == undefined){
 		sol[req.params.contato] = []
+		
 	}
-	sol[req.params.contato].push(req.body.texto)
 	
+	if(sol[req.params.contato].indexOf(req.params.name) == -1){
+	sol[req.params.contato].push(req.session.name)
+	}
+	console.log(sol)
+	res.send({sucess: true})
+	}
 })
  
 app.post('/api/resp', (req, res) => {
