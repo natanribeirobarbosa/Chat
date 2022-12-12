@@ -93,25 +93,25 @@ var c;
 		} 
 	})
 	}
-	
-	if(sol[req.session.name] != undefined){
+	var msgs = false
+	var name = '"'+req.session.name+'"'
+	console.log('suas solicitações: '+sol[req.session.name])
+	if(sol[req.session.name] != undefined && sol[req.session.name] != {}){
 		var users = sol[req.session.name]
-
-		console.log(users)
+	console.log('existem solicitações')
+		console.log('solicitações: '+sol[req.session.name])
 	res.locals.flash = {
  type: 'main',
  message: 'Alguem enviou uma mensagem!',
+
  };
- res.locals.msgs = sol[req.session.name]
+  msgs = sol[req.session.name]
 
 		sol[req.session.name] = undefined 
 	
 		
-	}else{
-		var flash2 = false
-		
 	}
-	res.render('index', {cont: c})
+	res.render('index', {cont: c, msgs: msgs})
 	console.log(online+' solicitações: '+JSON.stringify(sol))
 
 })
@@ -129,7 +129,7 @@ var c;
 				//console.log('o usuario'+req.params.nome+'não está ati')					
 				//res.redirect('/')
 			
-		}else{
+		}
 		
 				
 		var n = parseInt(req.params.nome)
@@ -138,12 +138,12 @@ var c;
 	   if(online.indexOf(n) != -1){
 		   if(names[n] != undefined){
 		
-				   nome = names[n]
+				   n = names[n]
 			   
 			   
 		   }
 		   
-		     
+		     console.log(n)
 	   res.render('chat2',{contato: n, message: true, nome: nome})
 	
 	   }else{
@@ -153,7 +153,7 @@ var c;
  };
  res.redirect(303, '/');
 }
-		}
+		
    })
 
  app.get('/config', (req, res) => {
@@ -306,6 +306,7 @@ app.post('/api/send', (req, res) => {
 })   
 
 app.post('/sol/:contato', (req, res) => {
+	console.log(parseInt(req.params.contato))
 	if(online[req.params.contato] == undefined){
 			req.session.flash = {
  type: 'main',
@@ -379,32 +380,28 @@ app.post('/api/resp2', (req, res) => {
  
    
  app.post('/loading', (req, res) =>{
+	 nome=""
 	 	if(blacklist.indexOf(req.session.name) != -1){
 		blacklist.splice(blacklist.indexOf(req.session.name), 1)
 	}
-	 if(onlineUsers.indexOf(req.session.name)  == -1){
+	 if(onlineUsers.indexOf(req.session.name)  == undefined){
 			res.send({m: 'erro'})
 	 }else{
-				
-	 
-	if(onlineUsers[req.session.dest] == undefined){
-
-		res.send({m: false})
-	}else{
-		req.session.dest = onlineUsers[req.session.dest]
-		 
-
-		if(names[req.session.dest] == undefined){
+		if(onlineUsers[req.session.dest] == undefined){
 			res.send({m: false})
 		}else{
+			req.session.dest = onlineUsers[req.session.dest]
+			if(names[req.session.dest] != undefined){
+				nome=names[req.session.dest]
+			}
+				res.send({m:true, nome: nome, id: req.session.dest})
 			
-		
-		res.send({m:true, nome: names[req.session.dest], id: req.session.dest})
+			
+			
+				}
 		}
-		
-		
-	 }}
-	res.end() 
+	 //console.log(req.session.dest+onlineUsers)
+
  })
  
  

@@ -197,7 +197,7 @@ document.getElementById('form').addEventListener('submit', (evt) => {
 		const myResult = document.getElementById('result')
 		
 		
-		fetch('/sol/'+contato, {method: 'post', body, headers}).then(resp => {
+		fetch('/sol/'+'{{contato}}', {method: 'post', body, headers}).then(resp => {
 		
 		return resp.json()
 		}).then(json => {

@@ -149,9 +149,9 @@ var id ={{id}}
 					
 					  
 		}).then(json => {
-		console.log('procura parceiro!')
+		
 					if(json.m == true){
-					
+					console.log(json.m)
 					document.getElementById('result').innerHTML = ''
 					document.getElementById('result').innerHTML += '<p class="n">Você já está falando com alguém! Diga oi!</p>'
 					document.getElementById('form').innerHTML = '<div><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div> <button  onclick="end()">Encerrar conversa</button><button onclick="salvar()">Salvar contato</button>'
@@ -162,11 +162,13 @@ var id ={{id}}
 					
 					
 					}else{
+					console.log(json.m)
 					if(json.m == 'erro') {
 					result.innerHTML = '<p class="n">O chat foi finalizado.</p><button onclick="novoChat()">Novo chat</button>'
 					document.getElementById('form').innerHTML = '<div><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div> <button  onclick="end()">Encerrar conversa</button><button onclick="salvar()">Salvar contato</button>'
 					
 					}else{
+					console.log(json.m)
 					procuraParceiro()
 					}}
 						})
