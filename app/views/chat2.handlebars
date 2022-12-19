@@ -124,7 +124,7 @@
 var contato = {{contato}}
 var nome = '{{nome}}'
 
-					document.getElementById('form').innerHTML = '<div><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div> <button  onclick="end()">Encerrar conversa</button><button onclick="salvar()">Salvar contato</button>'
+				
 					var n =  JSON.parse(valor_cookie('nomes')) 
 					var c = JSON.parse(valor_cookie('contatos')) 
 			
@@ -284,13 +284,31 @@ function valor_cookie(nome_cookie) {
     // Retorna apenas o valor do cookie
     return decodeURI(cookies);
 }
+procuraParceiro()
+ function procuraParceiro() {
+	result.innerHTML = '<p class="n">Esperando participante...</p>'
+	const headers = { 'Content-Type': 'application/json'}
+	fetch('/sol/'+nome, {method: 'post', headers}).then(
+		resp => {
+				 
+					return resp.json()
 
+		}).then(json => {
+			if(json.sucess == true){
+					result.innerHTML = '<p class="n">Participante online! mande mensagem!</p>'
+					document.getElementById('form').innerHTML = '<div><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div>'
+			}else{
+				procuraParceiro()
+			}
+		})
+}
 
 	if(valor_cookie('contatos') == false){
 	
 	document.cookie = 'contatos=[]; expires=' + data + ';';
 	
 	}
+
 
 
 

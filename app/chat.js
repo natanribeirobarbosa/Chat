@@ -96,18 +96,38 @@ var c;
 	var msgs = false
 	var name = '"'+req.session.name+'"'
 	console.log('suas solicitações: '+sol[req.session.name])
-	if(sol[req.session.name] != undefined && sol[req.session.name] != {}){
-		var users = sol[req.session.name]
-	console.log('existem solicitações')
-		console.log('solicitações: '+sol[req.session.name])
-	res.locals.flash = {
- type: 'main',
- message: 'Alguem enviou uma mensagem!',
+	if(sol[req.session.name] != undefined && sol[req.session.name] != []){
+		if(req.session.sol == undefined){
+			req.session.sol = '[]'
+			
+		}
+			var soli =JSON.parse(req.session.sol)
+			console.log('solicitações>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+soli)
+			let minhasSol = sol[req.session.name]
+			console.log(minhasSol)
+			minhasSol.map((s) => {
+				let p = soli.indexOf(s)
+					if(p == -1){
+						soli.push(s)
+					}
+				let u = sol[req.session.name]
+				console.log('solicitações>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+soli)
+					res.locals.flash = {
+						 type: 'main',
+						 message: 'Alguem enviou uma mensagem! <a href="/chat/'+u[0]+'">conversar</a>',
+					 };
+				sol[req.session.name].splice(p, 1)
+				
+			})
+			soli = JSON.stringify(soli)
+			req.session.sol = soli
+			console.log('solicitações>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+req.session.sol)
+			
+		//req.session.sol = sol[req.session.name]
 
- };
-  msgs = sol[req.session.name]
+  msgs = req.session.sol
 
-		sol[req.session.name] = undefined 
+		
 	
 		
 	}
@@ -123,12 +143,7 @@ var c;
 	}
 	
 	if(onlineUsers.indexOf(req.session.name)  != -1){
-				onlineUsers.splice(onlineUsers.indexOf(req.session.name), 1)
-				//onlineUsers.splice(pos, 1)
-				//req.session.flash = {message:'Feche a outra conversa ou espere alguns segundos e tente novamente!', type:"main"}
-				//console.log('o usuario'+req.params.nome+'não está ati')					
-				//res.redirect('/')
-			
+				onlineUsers.splice(onlineUsers.indexOf(req.session.name), 1)			
 		}
 		
 				
@@ -139,11 +154,21 @@ var c;
 		   if(names[n] != undefined){
 		
 				   n = names[n]
-			   
-			   
 		   }
 		   
-		     console.log(n)
+		   
+		   
+		   if(sol[req.params.nome] == undefined){
+		sol[req.params.nome] = []
+		
+	}
+	
+	if(sol[req.params.nome].indexOf(req.params.name) == -1){
+	sol[req.params.nome].push(req.session.name)
+	}
+	
+	
+
 	   res.render('chat2',{contato: n, message: true, nome: nome})
 	
 	   }else{
@@ -306,7 +331,14 @@ app.post('/api/send', (req, res) => {
 })   
 
 app.post('/sol/:contato', (req, res) => {
-	console.log(parseInt(req.params.contato))
+	let u = sol[req.session.name]
+	if(u[req.params.contato] != undefined){
+			res.send({sucess: true})
+
+	}else{
+			res.send({sucess: false})
+	}
+	/*console.log(parseInt(req.params.contato))
 	if(online[req.params.contato] == undefined){
 			req.session.flash = {
  type: 'main',
@@ -326,7 +358,7 @@ app.post('/sol/:contato', (req, res) => {
 	}
 	console.log(sol)
 	res.send({sucess: true})
-	}
+	}*/
 })
  
 app.post('/api/resp', (req, res) => {
@@ -412,6 +444,7 @@ app.post('/api/resp2', (req, res) => {
 	var pos = onlineUsers.indexOf(req.session.name)
 	
 	mensagens[req.session.name] = []
+	sol[req.session.name] = undefined 
 
 	if(pos == -1){
 		res.end()

@@ -1,8 +1,8 @@
 
-
+<div>
 <button class="link"><a href="/chat">Conversa <strong>aleatória</strong></a></button>
 <button class="link"><a href="/config">Configurações ⚙</a></button>
-
+</div>
 <ul id = "contatos">
 
 <ul>
@@ -43,7 +43,8 @@ function valor_cookie(nome_cookie) {
     return decodeURI(cookies);
 }
 
-
+	var nomes = JSON.parse(valor_cookie('nomes'))
+	var contatos = JSON.parse(valor_cookie('contatos'))
 
 	if(valor_cookie('nomes') == false){
 		var data = new Date(2025,0,01);
@@ -55,8 +56,7 @@ data = data.toGMTString();
 	document.cookie = 'myName= ; expires=' + data + ';';
 	}
 	
-	var nomes = JSON.parse(valor_cookie('nomes'))
-	var contatos = JSON.parse(valor_cookie('contatos'))
+
 	var vetor = [{{cont}}]
 	//var vetor2 = [{{msgs}}]
 	console.log(vetor)
@@ -71,35 +71,33 @@ data = data.toGMTString();
 		document.getElementById('contatos').innerHTML += '<li id="id'+contatos[n]+'"><a href="/chat/'+contatos[n]+'">'+nomes[n]+' '+i+'</a></li>'
 		n++
 	})
-/*var lista = document.querySelectorAll('ul#contatos li')	
-		vetor2.map((i) => {
-
-			document.getElementById(i).innerHTML = '<span style = "color:red;">novas mensagens!</span>'
-i2
-	})*/
-</script>
 
 {{#if msgs}}
-	<script>
-		window.alert('{{msgs}}')
-	var mensagens = [{{msgs}}]
-		var contatos = document.querySelectorAll('ul#contatos li')
+
+		//window.alert('{{msgs}}')
+	var mensagens = {{msgs}}
+		//var contatos = document.querySelectorAll('ul#contatos li')
 		for (var i = 0; mensagens.length > i; i++) {
+		console.log()
+		let pos = contatos.indexOf(mensagens[i])
+		if(pos != -1){
+			document.getElementById('id'+mensagens[i]).innerHTML += '<span style = "color:red;"> novas mensagens!</span>'
+		}
 		
-		contatos.map(c){
+		/*contatos.map(c){
+		console.log('id="id'+mensagens[i]+'"')
+	
 					if(('id="id'+mensagens[i]+'"') == c.attributes.id){
 				c.innerHTML = "novas mensagens!"
 			}
+				console.log(c.attributes.id)
 		}
-		
-		
-		
-		
+		*/
 
-   
 }
-	</script>
-{{/if}}
+{{/if }}
+</script>
+
 
 
 <!--{{> widget}}

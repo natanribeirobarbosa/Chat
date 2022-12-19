@@ -6,10 +6,34 @@
 	
 <head>
 <style>
+
+
+@import url('https://fonts.googleapis.com/css2?family=Yellowtail&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300&display=swap');
 	*{
-	font-family: arial;
+	font-family: 'Prompt', sans-serif;
 	color: black;
 	}
+	
+		#logo{
+	position: absolute;
+
+    top: 0;
+
+    margin-top: 10px;
+		z-index: 2;
+	font-family: 'Yellowtail', cursive;
+
+	    align-self: center;
+	}
+	
+		h1#logo>a{
+	margin-top: 0;
+		z-index: 2;
+	font-family: 'Yellowtail', cursive;
+	backgroun: red;
+	}
+	
 	
 	a{
 		text-decoration:none;
@@ -50,17 +74,19 @@
 	
 	body{
 	    display: flex;
-    flex-direction: column;
+  
     padding: 10px;
     margin: 0px;
 	 background-color: rgb(233 233 233 / 40%);
 	 gap:5px;
+	     align-items: center;
+		     justify-content: center;
 	}
 
-	#logo{
-	margin-top: 0;
-		z-index: 2;
-	}
+	#container{
+	    display: flex;
+    flex-direction: column;}
+
 	
 	#flash2{
 		display: none;
@@ -168,12 +194,16 @@ function valor_cookie(nome_cookie) {
 
 	
 {{/if}}
-
+	<div id="container">
 	<body id="body">
-	<h1 id="logo"><a href="/">CHAT</a></h1>
-	{{{body}}}
-	</body>
+
+	<h1 id="logo"><a href="/">Ops!</a></h1>
 	
+	{{{body}}}
+	
+	
+	</body>
+	</div>
 	
 	
 
