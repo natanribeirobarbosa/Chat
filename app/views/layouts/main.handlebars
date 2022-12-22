@@ -16,7 +16,7 @@
 	}
 	
 		#logo{
-	position: absolute;
+	
 
     top: 0;
 
@@ -85,7 +85,10 @@
 
 	#container{
 	    display: flex;
-    flex-direction: column;}
+    flex-direction: column;
+	    width: 100%;
+		    align-items: center;
+	}
 
 	
 	#flash2{
@@ -94,9 +97,8 @@
 
 	.flash{
 		    position: absolute;
-    right: 0;
-    left: 0;
-    margin: auto;
+        top: 0;
+    margin: 10px auto;
     width: 90%;
 	background-color: white;
     font-weight: bold;
@@ -110,6 +112,7 @@
   animation-delay: 5s;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
+      text-align: center;
 	}
 	
 	.flash> h1{
@@ -122,6 +125,24 @@
 	
 	.flashDanger{
 	background-image: linear-gradient(#ffcdcd, #ffb3b3,#ff9090);
+	}
+	
+	footer{
+	    box-sizing: border-box;
+	position: absolute;
+    bottom: 0;
+    transform: translateY(100%);
+    background: #0e0e0e;
+    width: 100%;
+    left: 0;
+	display:flex;
+	flex-direction:column;
+
+	padding: 10px;
+	}
+	
+	footer> *,footer> p>a{
+	color: white;
 	}
 	
 	@keyframes flash{
@@ -185,25 +206,27 @@ function valor_cookie(nome_cookie) {
 		{{{flash.message}}}
 	</div>
 
-		</div>	<!--<script>
-		window.alert('{{flash.type}}')
-		</script>
--->
-		
-
+		</div>	
 
 	
 {{/if}}
-	<div id="container">
+	
 	<body id="body">
-
+<div id="container">
 	<h1 id="logo"><a href="/">Ops!</a></h1>
+			
+	<footer>
+  <p>O site "Ops" é um projeto desenvolvido por Natã Ribeiro Barbosa. No momento ainda está na fase beta.</p>
+  <p><a href="https://github.com/natanribeirobarbosa">GITHUB</a></p>
+</footer>
 	
 	{{{body}}}
 	
-	
-	</body>
+
+
 	</div>
+	</body>
+
 	
 	
 

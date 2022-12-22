@@ -40,149 +40,34 @@ app.use(expressSession({
 }))
   
   
-  
-
-
-
-
-//rotas
-var chat = require('./rotas/random')
-console.log(chat)
  
 var id = 0
 var mensagens = {}
-var online = [-1]
 var onlineUsers = []
 var blacklist = []
-var a = {id, mensagens, online, onlineUsers, blacklist}
-module.exports = {id}
-
-var sol = {} //guarda as solicitações e as mensagens de cada solicitação
- 
 var names = {}
 
 //definindo o middleware de mensagens flash
 app.use(flash)
 
-//var blacklist2 = []
 
 app.get('/', (req, res) => {
-console.log(req.session.name)
+
 		if(req.session.name == undefined){//Recebe um novo id caso seja sua primeira vez no site
+		res.locals.flash = {message:'<p>O nosso site não funciona sem os cookies, ao continuar navegando, você concorda com a nossa política de privacidade.</p> <button onclick= "fechar()">ok</button>', type:'main'} 
+		res.locals.newU = 'Olá! seja bem vindo ao nosso site! aqui você pode conversar com pessoas aleatórias e desconhecidas! divirta-se!'
 		id++ 
 		req.session.name = id
 		
 		}
-	
-	   	if(online.indexOf(req.session.name) == -1){
-		online.push(req.session.name)
 
-	}
-var c;
-	if(req.cookies.contatos != null){
-		c = JSON.parse(req.cookies.contatos)
-	var n = 0
-	c.map((i) => {
-				if(online.indexOf(c[n]) == -1){
-					c[n] = false	
-					n++
-				
-		}else{
-			c[n] = true
-			n++
-		} 
-	})
-	}
-	var msgs = false
-	var name = '"'+req.session.name+'"'
-	console.log('suas solicitações: '+sol[req.session.name])
-	if(sol[req.session.name] != undefined && sol[req.session.name] != []){
-		if(req.session.sol == undefined){
-			req.session.sol = '[]'
-			
-		}
-			var soli =JSON.parse(req.session.sol)
-			console.log('solicitações>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+soli)
-			let minhasSol = sol[req.session.name]
-			console.log(minhasSol)
-			minhasSol.map((s) => {
-				let p = soli.indexOf(s)
-					if(p == -1){
-						soli.push(s)
-					}
-				let u = sol[req.session.name]
-				console.log('solicitações>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+soli)
-					res.locals.flash = {
-						 type: 'main',
-						 message: 'Alguem enviou uma mensagem! <a href="/chat/'+u[0]+'">conversar</a>',
-					 };
-				sol[req.session.name].splice(p, 1)
-				
-			})
-			soli = JSON.stringify(soli)
-			req.session.sol = soli
-			console.log('solicitações>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+req.session.sol)
-			
-		//req.session.sol = sol[req.session.name]
+	res.render('index')
 
-  msgs = req.session.sol
-
-		
-	
-		
-	}
-	res.render('index', {cont: c, msgs: msgs})
-	console.log(online+' solicitações: '+JSON.stringify(sol))
 
 })
-   
-   app.get('/chat/:nome', (req, res) => {
-	   	if(online.indexOf(req.session.name) == -1){
-		online.push(req.session.name)
-		
-	}
-	
-	if(onlineUsers.indexOf(req.session.name)  != -1){
-				onlineUsers.splice(onlineUsers.indexOf(req.session.name), 1)			
-		}
-		
-				
-		var n = parseInt(req.params.nome)
-		var nome;
-	   
-	   if(online.indexOf(n) != -1){
-		   if(names[n] != undefined){
-		
-				   n = names[n]
-		   }
-		   
-		   
-		   
-		   if(sol[req.params.nome] == undefined){
-		sol[req.params.nome] = []
-		
-	}
-	
-	if(sol[req.params.nome].indexOf(req.params.name) == -1){
-	sol[req.params.nome].push(req.session.name)
-	}
-	
-	
-
-	   res.render('chat2',{contato: n, message: true, nome: nome})
-	
-	   }else{
-		 	req.session.flash = {
- type: 'main',
- message: 'Este úsuario não está ativo no momento!',
- };
- res.redirect(303, '/');
-}
-		
-   })
 
  app.get('/config', (req, res) => {
-
+	res.render('config')
  }) 
    
 app.get('/chat',  (req, res) => {
@@ -192,15 +77,12 @@ app.get('/chat',  (req, res) => {
 		
 		}
 	
-	   	if(online.indexOf(req.session.name) == -1){
-		online.push(req.session.name)
 
-	}
 
 		if(onlineUsers.indexOf(req.session.name)  != -1){
 				//onlineUsers.splice(onlineUsers.indexOf(req.session.name), 1)
 				onlineUsers.splice(onlineUsers.indexOf(req.session.name), 1)
-				req.session.flash = {message:'E"><a style="padding: inherit;">dispensar</a></button>', type:"main"} 
+
 				res.redirect('/')
 			
 		}else{
@@ -229,8 +111,7 @@ app.get('/chat',  (req, res) => {
 			req.session.dest = user.position+1
 			res.render('chat', {message: 2, id: -1}) 
 		}
-	
-	console.log('"/" usuario '+req.session.name+' acabou de entrar, destino: '+req.session.dest+', variavel id:'+id+', usuarios online: '+JSON.stringify(onlineUsers))
+
 	
 		
 }})  
@@ -329,38 +210,6 @@ app.post('/api/send', (req, res) => {
 	
 	}  
 })   
-
-app.post('/sol/:contato', (req, res) => {
-	let u = sol[req.session.name]
-	if(u[req.params.contato] != undefined){
-			res.send({sucess: true})
-
-	}else{
-			res.send({sucess: false})
-	}
-	/*console.log(parseInt(req.params.contato))
-	if(online[req.params.contato] == undefined){
-			req.session.flash = {
- type: 'main',
- message: 'The email address you entered was not valid.',
- };
-	res.send({sucess: false})
-		
-	}else{
-	
-	if(sol[req.params.contato] == undefined){
-		sol[req.params.contato] = []
-		
-	}
-	
-	if(sol[req.params.contato].indexOf(req.params.name) == -1){
-	sol[req.params.contato].push(req.session.name)
-	}
-	console.log(sol)
-	res.send({sucess: true})
-	}*/
-})
- 
 app.post('/api/resp', (req, res) => {
 
 	
@@ -406,10 +255,6 @@ app.post('/api/resp', (req, res) => {
 
 })   
 
-app.post('/api/resp2', (req, res) => {
-	res.send('sucesso.')
-})
- 
    
  app.post('/loading', (req, res) =>{
 	 nome=""
@@ -444,7 +289,8 @@ app.post('/api/resp2', (req, res) => {
 	var pos = onlineUsers.indexOf(req.session.name)
 	
 	mensagens[req.session.name] = []
-	sol[req.session.name] = undefined 
+
+
 
 	if(pos == -1){
 		res.end()
@@ -456,23 +302,6 @@ app.post('/api/resp2', (req, res) => {
 	
 	}
  })
- 
-   app.post('/api/bye2', (req, res) => {
-	var pos = online.indexOf(req.session.name)
-	
-
-
-	if(pos == -1 || pos == undefined){
-		res.end()
-	}else{
-		online.splice(pos, 1)
-	 	delete names[req.session.name]
-		console.log("o user: "+req.session.name+" saiu! úsuarios online agora: "+onlineUsers, pos)
-		res.end()
-	
-	}
- })
-  
   
 // página 404 personalizada 
 app.use((req, res) => {

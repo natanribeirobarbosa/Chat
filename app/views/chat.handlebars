@@ -2,25 +2,23 @@
 	
 
 	#containerChat{
-    position: absolute;
     top: 0;
     bottom: 0;
     right: 0;
     left: 0;
     /* height: 100%; */
-    /* width: 100%; */
+     width: 100%; 
     justify-content: center;
     align-items: center;
     display: flex;
     flex-direction: column;
-
+	height: 90vh;
     
 	
 	}
 
 	#result{
 	    background-color: rgb(255 255 255 / 63%);
-    height: 80%;
     overflow: auto;
     position: relative;
     display: flex;
@@ -31,8 +29,9 @@
     max-width: 700px;
     border-radius: 10px;
     box-shadow: 0px 0px 10px 10px #00000017;
-    /* margin: 0px 0px 10px 0px; */
+    height: 80%;
 	}
+	
 	#form{
 	    /* width: 100%; */
     width: 70%;
@@ -128,7 +127,7 @@
 	{{#if message}}
 		if({{message}} == 1){
 					document.getElementById('result').innerHTML += '<p class="n">Você já está falando com alguém! Diga oi!</p>'
-					document.getElementById('form').innerHTML = '<div><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div><button onclick="end()">Encerrar conversa</button><button onclick="salvar()">Salvar contato</button>'
+		document.getElementById('form').innerHTML = '<div><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div><button onclick="end()">Encerrar conversa</button>'
 					document.getElementById('nome').innerHTML ='{{nome}}'
 					
 					procuraMensagens() //mensagens ativo
@@ -154,7 +153,7 @@ var id ={{id}}
 					console.log(json.m)
 					document.getElementById('result').innerHTML = ''
 					document.getElementById('result').innerHTML += '<p class="n">Você já está falando com alguém! Diga oi!</p>'
-					document.getElementById('form').innerHTML = '<div><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div> <button  onclick="end()">Encerrar conversa</button><button onclick="salvar()">Salvar contato</button>'
+					document.getElementById('form').innerHTML = '<div><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div><button onclick="end()">Encerrar conversa</button>'
 					document.getElementById('nome').innerHTML = json.nome
 					id = json.id;
 					procuraMensagens()
@@ -165,7 +164,7 @@ var id ={{id}}
 					console.log(json.m)
 					if(json.m == 'erro') {
 					result.innerHTML = '<p class="n">O chat foi finalizado.</p><button onclick="novoChat()">Novo chat</button>'
-					document.getElementById('form').innerHTML = '<div><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div> <button  onclick="end()">Encerrar conversa</button><button onclick="salvar()">Salvar contato</button>'
+			
 					
 					}else{
 					console.log(json.m)
@@ -282,6 +281,7 @@ document.getElementById('form').addEventListener('submit', (evt) => {
 	if(json.message == 1){
 					document.getElementById('result').innerHTML = '<p class="n">Você já está falando com alguém! Diga oi!</p>'
 					document.getElementById('nome').innerHTML = json.nome
+					document.getElementById('form').innerHTML = '<div><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div><button onclick="end()">Encerrar conversa</button>'
 			
 					procuraMensagens() //mensagens ativo
 		}else{
@@ -297,82 +297,6 @@ document.getElementById('form').addEventListener('submit', (evt) => {
 
 
 	
-	var data = new Date(2025,0,01);
-// Converte a data para GMT
-// Wed, 01 Jan 2020 02:00:00 GMT
-data = data.toGMTString();
-
-function salvar(){
-	
-
-
-	var contatos = JSON.parse(valor_cookie('contatos'))
-	console.log(contatos)
-	var nomes = JSON.parse(valor_cookie('nomes'))
-	
-if(contatos.indexOf(id)/*()*/ == -1){
-
-	contatos.push(id)
-	if(nomes.indexOf(document.getElementById('nome').innerText) == -1 && document.getElementById('nome').innerText != ''){
-		nomes.push(document.getElementById('nome').innerText)
-	}else{
-		var novoNome = window.prompt('Como você deseja chamar esse contato?')
-		nomes.push(novoNome) 
-	}
-
-	contatos = JSON.stringify(contatos)
-	nomes = JSON.stringify(nomes)
-	
-	document.cookie = 'contatos='+contatos+'; expires=' + data + ';';
-	document.cookie = 'nomes='+nomes+'; expires=' + data + ';';
-	window.alert('Contato salvo com sucesso!!')
-	
-
-}else{
-/*document.getElementById('flash2').style.display = 'none'
-	document.getElementById('flash2').style.display = 'inherit'
-	document.getElementById('flash2').innerHTML = '<p>Você já salvou esse contato antes!'*/
-	window.alert('Você já salvou esse contato antes!')
-	
-}
-
-
-}
-
-function valor_cookie(nome_cookie) {
-    // Adiciona o sinal de = na frente do nome do cookie
-    var cname = nome_cookie + '=';
-    
-    // Obtém todos os cookies do documento
-    var cookies = document.cookie;
-    
-    // Verifica se seu cookie existe
-    if (cookies.indexOf(cname) == -1) {
-        return false;
-    }
-    
-    // Remove a parte que não interessa dos cookies
-    cookies = cookies.substr(cookies.indexOf(cname), cookies.length);
-
-    // Obtém o valor do cookie até o ;
-    if (cookies.indexOf(';') != -1) {
-        cookies = cookies.substr(0, cookies.indexOf(';'));
-    }
-    
-    // Remove o nome do cookie e o sinal de =
-    cookies = cookies.split('=')[1];
-    
-    // Retorna apenas o valor do cookie
-    return decodeURI(cookies);
-}
-
-
-	if(valor_cookie('contatos') == false){
-	
-	document.cookie = 'contatos=[]; expires=' + data + ';';
-	
-	}
-
 
 
 
