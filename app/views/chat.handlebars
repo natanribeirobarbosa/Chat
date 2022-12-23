@@ -128,7 +128,7 @@
 	{{#if message}}
 		if({{message}} == 1){
 					document.getElementById('result').innerHTML += '<p class="n">Você já está falando com alguém! Diga oi!</p>'
-		document.getElementById('form').innerHTML = '<div style="display: flex;flex-wrap: wrap;justify-content: center;" ><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div><button onclick="end()">Encerrar conversa</button>'
+		document.getElementById('form').innerHTML = '<div style="display: flex;flex-wrap: wrap; justify-content: center;"><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div><button onclick="end()">Encerrar conversa</button>'
 					document.getElementById('nome').innerHTML ='{{nome}}'
 					
 					procuraMensagens() //mensagens ativo
@@ -154,7 +154,7 @@ var id ={{id}}
 					console.log(json.m)
 					document.getElementById('result').innerHTML = ''
 					document.getElementById('result').innerHTML += '<p class="n">Você já está falando com alguém! Diga oi!</p>'
-					document.getElementById('form').innerHTML = '<div><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div><button onclick="end()">Encerrar conversa</button>'
+					document.getElementById('form').innerHTML =  '<div style="display: flex;flex-wrap: wrap; justify-content: center;"><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div><button onclick="end()">Encerrar conversa</button>'
 					document.getElementById('nome').innerHTML = json.nome
 					id = json.id;
 					procuraMensagens()
@@ -282,7 +282,7 @@ document.getElementById('form').addEventListener('submit', (evt) => {
 	if(json.message == 1){
 					document.getElementById('result').innerHTML = '<p class="n">Você já está falando com alguém! Diga oi!</p>'
 					document.getElementById('nome').innerHTML = json.nome
-					document.getElementById('form').innerHTML = '<div><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div><button onclick="end()">Encerrar conversa</button>'
+					document.getElementById('form').innerHTML =  '<div style="display: flex;flex-wrap: wrap; justify-content: center;"><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div><button onclick="end()">Encerrar conversa</button>'
 			
 					procuraMensagens() //mensagens ativo
 		}else{
