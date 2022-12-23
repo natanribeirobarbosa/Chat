@@ -66,7 +66,7 @@ app.get('/', (req, res) => {
 
 })
 
- app.get('/sobre', (req, res) => {
+ app.get('/sobre242', (req, res) => {
 	res.render('sobre')
  }) 
  
