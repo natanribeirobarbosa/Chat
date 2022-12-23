@@ -12,7 +12,7 @@
     align-items: center;
     display: flex;
     flex-direction: column;
-	height: 90vh;
+	height: 90%;
     
 	
 	}
@@ -33,21 +33,22 @@
 	}
 	
 	#form{
-	    /* width: 100%; */
+	
     width: 70%;
     max-width: 490px;
-    /* align-self: auto; */
+
     display: flex;
     flex-direction: row;
-    /* align-items: center; */
+
     justify-content: center;
-    /* gap: 10px; */
+
     padding: 10px;
     background-color: rgb(225 225 225);
     border-radius: 0px 0px 10px 10px;
     flex-wrap: wrap;
     gap: 10px;
     margin: 0px;
+	justify-content: center;
 	}
 	
 	.y, .m, .n{
@@ -127,7 +128,7 @@
 	{{#if message}}
 		if({{message}} == 1){
 					document.getElementById('result').innerHTML += '<p class="n">Você já está falando com alguém! Diga oi!</p>'
-		document.getElementById('form').innerHTML = '<div><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div><button onclick="end()">Encerrar conversa</button>'
+		document.getElementById('form').innerHTML = '<div style="display: flex;flex-wrap: wrap;justify-content: center;" ><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div><button onclick="end()">Encerrar conversa</button>'
 					document.getElementById('nome').innerHTML ='{{nome}}'
 					
 					procuraMensagens() //mensagens ativo

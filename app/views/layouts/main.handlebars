@@ -38,6 +38,14 @@
 	a{
 		text-decoration:none;
 	}
+	a[target = "_blank"]{
+	text-decoration: underline;
+	}
+	
+	a[target = "_blank"]::after{
+		content : "🔗";
+		
+	}
 	
 	button>a{
 	font-size: 14px;
@@ -51,7 +59,7 @@
 	padding: 0px;}
 	
 	
-	button{
+	button, input[type= submit]{
 
 		    width: fit-content;
     padding: 5px;
@@ -88,6 +96,8 @@
     flex-direction: column;
 	    width: 100%;
 		    align-items: center;
+			    height: 100%;
+				    justify-content: center;
 	}
 
 	
@@ -141,8 +151,18 @@
 	padding: 10px;
 	}
 	
-	footer> *,footer> p>a{
+	#rotas, #redes{
+	display: flex;
+	    gap: 15px;
+    justify-content: center;
+    padding: 5px;
+
+	
+	}
+	
+	footer> *,footer> div>a{
 	color: white;
+	
 	}
 	
 	@keyframes flash{
@@ -216,8 +236,17 @@ function valor_cookie(nome_cookie) {
 	<h1 id="logo"><a href="/">Ifriends</a></h1>
 			
 	<footer>
-  <p>O site "Ifriends" é um projeto desenvolvido por Natã Ribeiro Barbosa. No momento ainda está na fase beta.</p>
-  <p><a href="https://github.com/natanribeirobarbosa">GITHUB</a></p>
+
+
+
+
+
+<div id = "redes">
+  <a href="https://github.com/natanribeirobarbosa" target="_blank">Instagram</a>
+</div>
+<div id = "rotas">
+	<a href="/sobre">sobre</a>
+</div>
 </footer>
 	
 	{{{body}}}
