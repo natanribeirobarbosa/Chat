@@ -65,9 +65,11 @@ app.get('/', (req, res) => {
 
 
 })
+
  app.get('/sobre', (req, res) => {
-	res.render('sobre')
+	res.send('sobre')
  }) 
+ 
  app.get('/config', (req, res) => {
 	res.render('config')
  }) 
