@@ -20,7 +20,7 @@
 
     top: 0;
 
-    margin-top: 10px;
+    margin:0;
 		z-index: 2;
 	font-family: 'Yellowtail', cursive;
 
@@ -180,6 +180,10 @@
 	{{{_sections.style}}}
 </style>
 	<script>
+	window.addEventListener('offline', (event) => {
+    console.log("Estamos com problemas de conecção...");
+});
+	
 	
 	function fechar(){
 		document.getElementById('flash').style.display= "none"
