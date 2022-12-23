@@ -73,7 +73,7 @@ app.get('/', (req, res) => {
  }) 
  
   app.get('/sobre', (req, res) => {
-	res.send('sobre')
+	res.render('sobre')
  }) 
    
 app.get('/chat',  (req, res) => {
