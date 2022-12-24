@@ -54,7 +54,7 @@ app.use(flash)
 app.get('/', (req, res) => {
 
 		if(req.cookies.novo == undefined){//Recebe um novo id caso seja sua primeira vez no site
-		res.locals.flash = {message:'<p>O nosso site não funciona sem os cookies, ao continuar navegando, você concorda com a nossa política de privacidade.</p> <button onclick= "fechar()">ok</button>', type:'main'} 
+		res.locals.flash = {message:'<p>O nosso site não funciona sem os cookies, ao continuar navegando, você concorda com a nossa política de privacidade.</p> <button onclick= "fechar()">ok</button>', type:'main', time: 1000} 
 		res.locals.newU = 'Olá! seja bem vindo ao nosso site! aqui você pode conversar com pessoas aleatórias e desconhecidas! divirta-se!'
 		id++ 
 		req.session.name = id

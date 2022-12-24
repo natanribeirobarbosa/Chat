@@ -109,7 +109,7 @@
 		    position: absolute;
         top: 0;
     margin: 10px auto;
-    width: 90%;
+z-index:3;
 	background-color: white;
     font-weight: bold;
     border: 1px solid #00000017;
@@ -118,11 +118,15 @@
     padding: 10px;
     z-index: 3;
 	animation-name: flash;
-  animation-duration: 5s;
-  animation-delay: 5s;
+  animation-duration: {{flash.time}}s;
+  
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
       text-align: center;
+	}
+	
+	.flash *{
+	margin-top:0;
 	}
 	
 	.flash> h1{
@@ -167,9 +171,13 @@
 	
 	@keyframes flash{
 		0%{ opacity:100%;}
-		90%{ opacity:0%;
-			z-index:3;
+		90%{ opacity:100%;
+			
 		}
+		95%{
+			opacity:80%;
+		}
+		
 		100%{
 		opacity:0%;
 		z-index:-1;
@@ -181,7 +189,7 @@
 </style>
 	<script>
 	window.addEventListener('offline', (event) => {
-    console.log("Estamos com problemas de conecção...");
+		window.alert("Estamos com problemas de conecção...");
 });
 	
 	
@@ -220,7 +228,7 @@ function valor_cookie(nome_cookie) {
 	</script>
 
 {{#if flash}}
-
+	
 
 
 		
@@ -238,7 +246,7 @@ function valor_cookie(nome_cookie) {
 	<body id="body">
 <div id="container">
 	<h1 id="logo"><a href="/">Ifriends</a></h1>
-			
+				{{{body}}}
 	<footer>
 
 
@@ -253,7 +261,7 @@ function valor_cookie(nome_cookie) {
 </div>
 </footer>
 	
-	{{{body}}}
+
 	
 
 
