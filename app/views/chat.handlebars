@@ -19,7 +19,7 @@
 	
 	#nome{
 	margin: 0px;
-	font-size:25px;
+	font-size:20px;
 	}
 	
 	#contato{
@@ -31,7 +31,7 @@
     justify-content: center;
     gap: 20px;
     margin: 0px;
-    padding: 10px;
+    padding: 5px;
 	}
 
 	#result{
@@ -59,11 +59,11 @@
 
     justify-content: center;
 
-    padding: 10px;
+    padding: 5px;
     background-color: rgb(225 225 225);
     border-radius: 0px 0px 10px 10px;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 5px;
     margin: 0px;
 	justify-content: center;
 	}
@@ -112,7 +112,7 @@
 
 <div id="containerChat">
 <div id="contato">
-<a href="/"><img src="https://cdn-icons-png.flaticon.com/128/566/566092.png" height= "25px"></img></a>
+<a href="/"><img src="https://cdn-icons-png.flaticon.com/128/566/566092.png" height= "20px"></img></a>
 <h1 id="nome"></h1>
 </div>
 <div id="result">
@@ -142,38 +142,28 @@
 	
 	});
 
-
-	
-
-//verifica se o destino está pronto
-	{{#if message}}
-		if({{message}} == 1){
-					document.getElementById('result').innerHTML += '<p class="n">Você já está falando com alguém! Diga oi!</p>'
-		document.getElementById('form').innerHTML = '<div style="display: flex;flex-wrap: wrap; justify-content: center;"><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div><button onclick="end()">Encerrar conversa</button>'
-					document.getElementById('nome').innerHTML +='{{nome}}'
-					
-					procuraMensagens() //mensagens ativo
-		}else{
-					procuraParceiro() //parceiro ativo
-		}  
-	{{/if}}
 	
 var id ={{id}}
 //Procura algum parceiro disponivel
+
+
+	
+
+
+					procuraParceiro() 
+
+
   function procuraParceiro() {
   document.getElementById('nome').innerHTML = ''
 	result.innerHTML = '<p class="n">Procurando participante...</p>'
 	const headers = { 'Content-Type': 'application/json'}
-	fetch('/loading', {method: 'post', headers}).then(
+	fetch('/api/loading', {method: 'post', headers}).then(
 		resp => {
-				 
-					return resp.json()
-					
-					  
+					return resp.json() 
 		}).then(json => {
 		
 					if(json.m == true){
-					console.log(json.m)
+			
 					document.getElementById('result').innerHTML = ''
 					document.getElementById('result').innerHTML += '<p class="n">Você já está falando com alguém! Diga oi!</p>'
 					document.getElementById('form').innerHTML =  '<div style="display: flex;flex-wrap: wrap; justify-content: center;"><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div><button onclick="end()">Encerrar conversa</button>'
@@ -184,24 +174,20 @@ var id ={{id}}
 					
 					
 					}else{
-					console.log(json.m)
+				
 					if(json.m == 'erro') {
 					result.innerHTML = '<p class="n">O chat foi finalizado.</p><button onclick="novoChat()">Novo chat</button>'
 			
 					
 					}else{
-					console.log(json.m)
+					
 					procuraParceiro()
-					}}
+					}
+					}
 						})
 		.catch(err => { 
-
-						console.log(err)
-	
-	
-	
-	})	}
-
+						window.alert=err
+						})	}
 
 
  
@@ -213,7 +199,7 @@ var id ={{id}}
 	fetch('/api/resp', {method: 'post', headers}).then(
 		resp => {
 					return resp.json()
-						console.log('procurando mensagens!')
+				
 		}).then(json => {
 		
 		if(json.meOffline == true){
@@ -231,18 +217,19 @@ var id ={{id}}
 			if(json.mensagem != undefined && json.mensagem != ''){
 					result.innerHTML += '<p class="y">'+json.mensagem+'</p>'
 					result.scrollTop = result.scrollHeight
-						console.log('procurando mensagens!')	}
+				}
 						
 				procuraMensagens()
 				
-			}}})
+			}
+			}
+			})
 				
 					
 					
 		.catch(err => { 
 						window.alert=err
-						console.log('REQUISIÇÂO NEGADA')
-							console.log('procurando mensagens!')
+					
 	})
 	
 	
@@ -286,7 +273,6 @@ document.getElementById('form').addEventListener('submit', (evt) => {
 
 	
 			fetch('/api/bye', {method: 'post'}).then(() => {
-			//result.innerHTML += '<button>Novo chat</button>'
 			
 		})
 		
@@ -295,28 +281,7 @@ document.getElementById('form').addEventListener('submit', (evt) => {
 
 
 	function novoChat() {
-	const headers = { 'Content-Type': 'application/json'}
-	fetch('/api/chat2', {method: 'post', headers}).then(resp => {
-	console.log(resp.status)
-		return resp.json()
-		
-	}).then(json => {
-	
-	if(json.message == 1){
-					document.getElementById('result').innerHTML = '<p class="n">Você já está falando com alguém! Diga oi!</p>'
-					document.getElementById('nome').innerHTML += json.nome
-					document.getElementById('form').innerHTML =  '<div style="display: flex;flex-wrap: wrap; justify-content: center;"><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div><button onclick="end()">Encerrar conversa</button>'
-			
-					procuraMensagens() //mensagens ativo
-		}else{
-					procuraParceiro() //parceiro ativo
-		}  
-	
-
-	}).catch((err) => {
-		console.log(err)
-	})
-	
+		document.location.reload(true);
 	}
 
 

@@ -49,6 +49,19 @@ var names = {}
 
 //definindo o middleware de mensagens flash
 app.use(flash)
+app.use((req, res, next) => {
+	if(req.session.name == null){//Recebe um novo id caso seja sua primeira vez no site
+		id++ 
+		req.session.name = id
+		
+		}
+
+
+	if(blacklist.indexOf(req.session.name) != -1){
+		blacklist.splice(blacklist.indexOf(req.session.name), 1)
+	}
+	next()
+})
 
 
 app.get('/', (req, res) => {
@@ -76,17 +89,8 @@ app.get('/', (req, res) => {
 	res.render('sobre')
  }) 
    
-app.get('/chat',  (req, res) => {
-		if(req.session.name == null){//Recebe um novo id caso seja sua primeira vez no site
-		id++ 
-		req.session.name = id
-		
-		}
-	
-
-
+app.get('/chat',(req, res) => {
 		if(onlineUsers.indexOf(req.session.name)  != -1){
-				//onlineUsers.splice(onlineUsers.indexOf(req.session.name), 1)
 				onlineUsers.splice(onlineUsers.indexOf(req.session.name), 1)
 
 				res.redirect('/')
@@ -107,74 +111,10 @@ app.get('/chat',  (req, res) => {
 		 
 	mensagens[user.id] = []
 		 
-		if(user.position % 2 != 0){//A posição do úsuario no array é impar? se sim,  seu destino é uma posição atrás no array
-			var i =  user.position-1
-			user.dest = onlineUsers[i]
-			req.session.dest = user.dest
-			res.render('chat', {message: 1, nome: names[req.session.dest], id: req.session.dest})
-			
-		}else{	//Você é par,  Seu destino estará uma casa a frente...
-			req.session.dest = user.position+1
-			res.render('chat', {message: 2, id: -1}) 
-		}
-
+	res.render('chat')
 	
 		
 }})  
-
-
-
-app.post('/api/chat2', (req, res) => { 
-	if(req.session.name == null){//envia erro caso o user não tenha vindo de outra conversa
-
-		res.send({erro: true})
-		res.end()
-		
-		}else{
-		if(onlineUsers.indexOf(req.session.name)  != -1){
-			var pos = onlineUsers.indexOf(req.session.name)
-			onlineUsers.splice(pos, 1)
-			res.end()
-		}else{
-		
-				onlineUsers.push(req.session.name)
-				
-						if(req.cookies.myName != undefined){
-					names[req.session.name] = req.cookies.myName
-				}else{
-					names[req.session.name] = ''
-				}
-				
-		var user = {id: req.session.name,
-							position: onlineUsers.indexOf(req.session.name),
-							dest: undefined
-							
-							}  
-							
-		 
-	mensagens[user.id] = []
-		 
-		if(user.position % 2 != 0){//A posição do úsuario no array é impar? se sim,  seu destino é uma posição atrás no array
-			var i =  user.position-1
-			user.dest = onlineUsers[i]
-			req.session.dest = user.dest
-			res.send({message: 1, nome: names[req.session.dest], id: req.session.dest})  
-			res.end()
-		
-			
-			
-		}else{	//Você é par,  Seu destino estará uma casa a frente...
-			req.session.dest = user.position+1
-			res.cookie('dest', user.position+1)
-			res.send({message: 2, id: -1}) 
-			res.end() 
-	
-		}
-
-	 
-		}
-		}
-		})  
 
 
 
@@ -186,7 +126,6 @@ blacklistfunc()
 			var user = blacklist[index]
 
 			onlineUsers.splice(onlineUsers.indexOf(user), 1)
-			//online.splice(online.indexOf(user), 1)
 			blacklist.splice(index, 1)
 
 }
@@ -241,7 +180,7 @@ app.post('/api/resp', (req, res) => {
 		
 		res.send({offline: true})
 		res.end()
-		//console.log('O destino: '+req.session.dest+'Esta offline!')
+		
 	}else{
 	
 	if(mensagens[req.session.name].length == 0){
@@ -261,29 +200,57 @@ app.post('/api/resp', (req, res) => {
 
 })   
 
+
+
    
- app.post('/loading', (req, res) =>{
-	 nome=""
-	 	if(blacklist.indexOf(req.session.name) != -1){
-		blacklist.splice(blacklist.indexOf(req.session.name), 1)
-	}
-	 if(onlineUsers.indexOf(req.session.name)  == undefined){
+ app.post('/api/loading', (req, res) =>{
+
+	 var user = {
+		name:"",
+		id: req.session.name,
+		position: onlineUsers.indexOf(req.session.name)
+		} 
+	
+		 if(onlineUsers.indexOf(req.session.name) === undefined){
+		
 			res.send({m: 'erro'})
 	 }else{
-		if(onlineUsers[req.session.dest] == undefined){
-			res.send({m: false})
+	 if(names[req.session.dest] != undefined){
+		user.name=names[req.session.dest]
+	}
+	
+
+
+	 if(user.position % 2 != 0){//A posição do úsuario no array é impar? se sim, seu destino é uma posição atrás no array
+		var i =  user.position-1
+		user.dest = onlineUsers[i]
+		req.session.dest = user.dest
+		res.send({m:true, nome: user.name, id: req.session.dest})
+		
+	}else{	//Você é par,  Seu destino estará uma casa a frente...
+		let pos = user.position+1
+		if(onlineUsers[pos] !== undefined){
+			req.session.dest = onlineUsers[pos]
+			res.send({m:true, nome: user.name, id: req.session.dest})
 		}else{
-			req.session.dest = onlineUsers[req.session.dest]
-			if(names[req.session.dest] != undefined){
-				nome=names[req.session.dest]
-			}
-				res.send({m:true, nome: nome, id: req.session.dest})
-			
-			
-			
-				}
+		res.send({m:false, nome: user.name, id: req.session.dest})
 		}
-	 //console.log(req.session.dest+onlineUsers)
+	}
+	 }
+
+
+	 	
+
+
+		
+		
+			
+			
+			
+			
+				
+		
+
 
  })
  
