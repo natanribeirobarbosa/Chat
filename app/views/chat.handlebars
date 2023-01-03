@@ -1,5 +1,9 @@
 {{#section 'style'}}
-	
+	<style>
+	header{
+		display: flex;
+    	align-items: center;
+	}
 
 	#containerChat{
     top: 0;
@@ -21,17 +25,35 @@
 	margin: 0px;
 	font-size:20px;
 	}
+
+	#writing{
+		opacity: 0%;
+		transition: 200ms;
+		display: flex;
+    height: 100%;
+    align-items: end;
+
+   
+	}
 	
 	#contato{
-	display: flex;
+	display: grid;
     flex-direction: row;
     align-items: center;
-    /* justify-items: center; */
-    width: 80%;
+  
+    width: min-content;
     justify-content: center;
-    gap: 20px;
+    gap: 15px;
     margin: 0px;
     padding: 5px;
+	grid-template-areas: "voltar nome writing";
+    grid-template-columns: 30px max-content 30px;
+    text-align: center;
+	}
+
+	#voltar{
+		display: flex;
+		align-items: center;
 	}
 
 	#result{
@@ -66,6 +88,7 @@
     gap: 5px;
     margin: 0px;
 	justify-content: center;
+	box-shadow: 0px 0px 15px 2px #00000017;
 	}
 	
 	.y, .m, .n{
@@ -101,20 +124,21 @@
 	align-self: center;
 	}
 	
-	@media  (max-width: 900px) {
-  #container {
-   
-  }
-}
-	
+
+	</style>
 
 {{/section}}
 
 <div id="containerChat">
+	
 <div id="contato">
-<a href="/"><img src="https://cdn-icons-png.flaticon.com/128/566/566092.png" height= "20px"></img></a>
-<h1 id="nome"></h1>
+	<a id = "voltar" href="/"><img src="https://cdn-icons-png.flaticon.com/128/566/566092.png" height= "20px"></img></a>
+	<h1 id="nome">...</h1>
+	<span id = "writing">digitando...</span>
+
 </div>
+
+
 <div id="result">
 
 
@@ -154,7 +178,7 @@ var id ={{id}}
 
 
   function procuraParceiro() {
-  document.getElementById('nome').innerHTML = ''
+  
 	result.innerHTML = '<p class="n">Procurando participante...</p>'
 	const headers = { 'Content-Type': 'application/json'}
 	fetch('/api/loading', {method: 'post', headers}).then(
@@ -166,8 +190,9 @@ var id ={{id}}
 			
 					document.getElementById('result').innerHTML = ''
 					document.getElementById('result').innerHTML += '<p class="n">Você já está falando com alguém! Diga oi!</p>'
-					document.getElementById('form').innerHTML =  '<div style="display: flex;flex-wrap: wrap; justify-content: center;"><input id="texto" name="texto" type="text"><input type="submit" value="enviar"></div><button onclick="end()">Encerrar conversa</button>'
-					document.getElementById('nome').innerHTML += json.nome
+					document.getElementById('form').innerHTML =  '<div style="display: flex;flex-wrap: wrap; justify-content: center;"><input id="texto" name="texto" type="text" onkeyup="writing()"><input type="submit" value="enviar"></div><button onclick="end()">Encerrar conversa</button>'
+					document.getElementById('nome').innerHTML = json.nome
+				
 					id = json.id;
 					procuraMensagens()
 					
@@ -184,9 +209,8 @@ var id ={{id}}
 					procuraParceiro()
 					}
 					}
-						})
-		.catch(err => { 
-						window.alert=err
+						}).catch(err => { 
+						window.alert='Erro! Tente novamente!'
 						})	}
 
 
@@ -204,20 +228,30 @@ var id ={{id}}
 		
 		if(json.meOffline == true){
 		result.innerHTML = '<p class="n">O chat foi finalizado.</p><button onclick="novoChat()">Novo chat</button>'
-			end('abandono')
+		document.getElementById('nome').innerHTML= ''
+		document.getElementById('writing').style.opacity = 0%
+			end()
 			
 		}else{
 		
 		
 		if(json.offline == true){
 			result.innerHTML = '<p class="n">O chat foi finalizado.</p><button onclick="novoChat()">Novo chat</button>'
-			end('abandono')
+			document.getElementById('nome').innerHTML= ''
+			document.getElementById('writing').style.opacity = 0%
+			end()
 		}else{
 	
 			if(json.mensagem != undefined && json.mensagem != ''){
 					result.innerHTML += '<p class="y">'+json.mensagem+'</p>'
 					result.scrollTop = result.scrollHeight
 				}
+			
+			if(json.writing == true){
+				document.getElementById('writing').style.opacity = '100%'
+			}else{
+				document.getElementById('writing').style.opacity = '0%'
+			}
 						
 				procuraMensagens()
 				
@@ -272,9 +306,7 @@ document.getElementById('form').addEventListener('submit', (evt) => {
 	function end(a){
 
 	
-			fetch('/api/bye', {method: 'post'}).then(() => {
-			
-		})
+			fetch('/api/bye', {method: 'post'})
 		
 	}
 
@@ -282,6 +314,10 @@ document.getElementById('form').addEventListener('submit', (evt) => {
 
 	function novoChat() {
 		document.location.reload(true);
+	}
+
+	function writing() {
+		fetch('/api/writing', {method: 'post'})
 	}
 
 

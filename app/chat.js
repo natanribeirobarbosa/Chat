@@ -46,6 +46,7 @@ var mensagens = {}
 var onlineUsers = []
 var blacklist = []
 var names = {}
+var writing = []
 
 //definindo o middleware de mensagens flash
 app.use(flash)
@@ -53,9 +54,7 @@ app.use((req, res, next) => {
 	if(req.session.name == null){//Recebe um novo id caso seja sua primeira vez no site
 		id++ 
 		req.session.name = id
-		
 		}
-
 
 	if(blacklist.indexOf(req.session.name) != -1){
 		blacklist.splice(blacklist.indexOf(req.session.name), 1)
@@ -142,6 +141,10 @@ blacklistfunc()
 }
  
 app.post('/api/send', (req, res) => { 
+	if(writing.indexOf(req.session.name) != undefined){
+		writing.splice(writing.indexOf(req.session.name), 1)
+	}
+
 	if(typeof(req.body.texto) != String){
 		var a = req.body.texto.toString()
 		mensagens[req.session.dest].push(a)
@@ -156,6 +159,8 @@ app.post('/api/send', (req, res) => {
 	}  
 })   
 app.post('/api/resp', (req, res) => {
+
+	let wr = false;
 
 	
 	
@@ -182,9 +187,12 @@ app.post('/api/resp', (req, res) => {
 		res.end()
 		
 	}else{
+		if(writing.indexOf(req.session.dest) != -1){
+			wr = true
+		}
 	
 	if(mensagens[req.session.name].length == 0){
-		res.send({"mensagem": undefined}) 
+		res.send({"mensagem": undefined, writing: wr}) 
 	}else{
 	
 		var msg = []
@@ -206,7 +214,7 @@ app.post('/api/resp', (req, res) => {
  app.post('/api/loading', (req, res) =>{
 
 	 var user = {
-		name:"",
+		name: "???",
 		id: req.session.name,
 		position: onlineUsers.indexOf(req.session.name)
 		} 
@@ -215,9 +223,7 @@ app.post('/api/resp', (req, res) => {
 		
 			res.send({m: 'erro'})
 	 }else{
-	 if(names[req.session.dest] != undefined){
-		user.name=names[req.session.dest]
-	}
+	
 	
 
 
@@ -225,36 +231,34 @@ app.post('/api/resp', (req, res) => {
 		var i =  user.position-1
 		user.dest = onlineUsers[i]
 		req.session.dest = user.dest
+		if(names[req.session.dest] != undefined && names[req.session.dest] != ''){
+			user.name=names[req.session.dest]
+		}
 		res.send({m:true, nome: user.name, id: req.session.dest})
 		
 	}else{	//Você é par,  Seu destino estará uma casa a frente...
 		let pos = user.position+1
-		if(onlineUsers[pos] !== undefined){
+		if(onlineUsers[pos] !== undefined && names[req.session.dest] != ''){
 			req.session.dest = onlineUsers[pos]
+			if(names[req.session.dest] != undefined && names[req.session.dest] != ''){
+				user.name = names[req.session.dest]
+			}
 			res.send({m:true, nome: user.name, id: req.session.dest})
 		}else{
-		res.send({m:false, nome: user.name, id: req.session.dest})
+		res.send({m:false})
 		}
 	}
 	 }
-
-
-	 	
-
-
-		
-		
-			
-			
-			
-			
-				
-		
-
-
  })
  
- 
+ app.post('/api/writing', (req, res) => {
+	if(writing.indexOf(req.session.name) == -1){
+		writing.push(req.session.name)
+	}
+
+	res.end()
+
+ })
 
  
   
@@ -262,7 +266,7 @@ app.post('/api/resp', (req, res) => {
 	var pos = onlineUsers.indexOf(req.session.name)
 	
 	mensagens[req.session.name] = []
-
+	writing.splice(writing.indexOf(req.session.name), 1)
 
 
 	if(pos == -1){
