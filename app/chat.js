@@ -46,6 +46,7 @@ var mensagens = {}
 var onlineUsers = []
 var blacklist = []
 var names = {}
+var sex = {}
 var writing = []
 
 //definindo o middleware de mensagens flash
@@ -96,7 +97,7 @@ app.get('/chat',(req, res) => {
 			
 		}else{
 				onlineUsers.push(req.session.name) 
-			if(req.cookies.myName != undefined){
+			if(req.cookies.myName != undefined && req.cookies.myName.length <= 10){
 					names[req.session.name] = req.cookies.myName
 				}else{
 					names[req.session.name] = undefined

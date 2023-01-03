@@ -1,11 +1,29 @@
+{{#section 'style'}}
+<style>
+    h1#form{
+        font-size: 14px;
+    margin-bottom: 0;
 
+    
+}
+    #salvar{
+        margin: 10px;
+    }
+</style>
+{{/section}}
 
+<h1 id= "form" for="texto">Nome:</h1>
+<input id="nome" name="nome" type="text" maxlength="10"><br>
 
+<h1 id= "form" for="texto">Sexo:</h1>
+<div>
+<input id = "mascu" type="radio" name="sexo" value= "0">
+<label for="mascu">Masculino</label>
+<input id = "fem" type="radio" name="sexo" value= "1">
+<label for="mascu">Feminino</label>
+</div>
 
-<label for="texto">Seu nome:</label>
-<input id="nome" name="nome" type="text"><br>
-
-<div><button onclick="salvar()">Salvar</button><span id="result" style="color: green;"></span></div>
+<div id = "salvar"><button onclick="salvar()">Salvar</button><span id="result" style="color: green;"></span></div>
 
 
 
@@ -23,6 +41,7 @@ document.getElementById('nome').value = valor_cookie('myName')
 function salvar(){
 // Cria o cookie
 	document.cookie = 'myName='+document.getElementById('nome').value+'; expires=' + data + ';';
+    document.cookie = 'sex='+document.querySelector('input[name = "sexo"]:checked').value+'; expires=' + data + ';';
 	document.getElementById('result').innerText = ' Salvo!'
 	setTimeout(() => {document.getElementById('result').innerText = ""}, 1000)
 }
