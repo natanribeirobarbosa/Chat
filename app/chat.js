@@ -53,7 +53,7 @@ var writing = []
 app.use(flash)
 
 app.get('/siteMap', (req, res) => {
-	res.sendFile(__dirname +'/static/siteMap.txt')
+	res.send('https://www.ifriends.com.br/')
 })
 
 app.use((req, res, next) => {
