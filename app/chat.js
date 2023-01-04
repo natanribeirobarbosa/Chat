@@ -51,6 +51,11 @@ var writing = []
 
 //definindo o middleware de mensagens flash
 app.use(flash)
+
+app.get('/siteMap', (req, res) => {
+	res.sendFile(__dirname +'/static/siteMap.txt')
+})
+
 app.use((req, res, next) => {
 	if(req.session.name == null){//Recebe um novo id caso seja sua primeira vez no site
 		id++ 
