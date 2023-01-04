@@ -53,7 +53,7 @@ var writing = []
 app.use(flash)
 
 app.get('/siteMap', (req, res) => {
-	res.send('https://www.ifriends.com.br/')
+	res.send('https://www.ifriends.com.br/\r\nhttps://www.ifriends.com.br/chat')
 })
 
 app.use((req, res, next) => {
