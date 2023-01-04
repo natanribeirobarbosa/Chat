@@ -53,7 +53,7 @@ var writing = []
 app.use(flash)
 
 app.get('/siteMap', (req, res) => {
-	res.send('https://www.ifriends.com.br/\r\nhttps://www.ifriends.com.br/chat')
+	res.send('https://www.ifriends.com.br/\n https://www.ifriends.com.br/chat')
 })
 
 app.use((req, res, next) => {
@@ -72,8 +72,8 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => {
 
 		if(req.cookies.novo == undefined){//Recebe um novo id caso seja sua primeira vez no site
-		res.locals.flash = {message:'<p>O nosso site não funciona sem os cookies, ao continuar navegando, você concorda com a nossa política de privacidade.</p> <button onclick= "fechar()">ok</button>', type:'main', time: 1000} 
-		res.locals.newU = 'Olá! seja bem vindo ao nosso site! aqui você pode conversar com pessoas aleatórias e desconhecidas! divirta-se!'
+		res.locals.flash = {message:'<p>O nosso site não funciona sem os cookies, ao continuar navegando, você concorda com a nossa <a href="/politicadecookies">política de cookies</a>.</p> <button onclick= "fechar()">ok</button>', type:'main', time: 1000} 
+		res.locals.newU = '<p class="text">Olá! seja bem vindo ao nosso site! aqui você pode conversar com pessoas aleatórias e desconhecidas! Basta clicar em <strong>conversa aleatória</strong> para começar a falar! Em <strong>configurações</strong> você pode editar o seu nome de exibição.</p>'
 		id++ 
 		req.session.name = id
 		
@@ -93,6 +93,12 @@ app.get('/', (req, res) => {
   app.get('/sobre', (req, res) => {
 	res.render('sobre')
  }) 
+
+  
+ app.get('/politicadecookies', (req, res) => {
+	res.render('cookies')
+ }) 
+
    
 app.get('/chat',(req, res) => {
 		if(onlineUsers.indexOf(req.session.name)  != -1){
