@@ -1,5 +1,8 @@
 {{#section 'style'}}
 <style>
+    #text{
+        display: none;
+    }
 	
 
     footer{
@@ -97,6 +100,7 @@ function valor_cookie(nome_cookie) {
 		var data = new Date(2025,0,01);
 data = data.toGMTString();
 	document.cookie = 'novo= true; expires=' + data + ';';
+    
 
 	}
 	

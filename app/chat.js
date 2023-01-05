@@ -73,7 +73,7 @@ app.get('/', (req, res) => {
 
 		if(req.cookies.novo == undefined){//Recebe um novo id caso seja sua primeira vez no site
 		res.locals.flash = {message:'<p>O nosso site não funciona sem os cookies, ao continuar navegando, você concorda com a nossa <a href="/politicadecookies">política de cookies</a>.</p> <button onclick= "fechar()">ok</button>', type:'main', time: 1000} 
-		res.locals.newU = '<p class="text">No Ifriends você pode conversar com pessoas aleatórias e desconhecidas! Seja para amizade ou paquera! Fale com desconhecidos! Faça amigos!</p>'
+		res.locals.newU = '<p id="text" class="text">No Ifriends você pode conversar com pessoas aleatórias e desconhecidas! Seja para amizade ou paquera! Fale com desconhecidos! Faça amigos!</p>'
 		id++ 
 		req.session.name = id
 		
