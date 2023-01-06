@@ -132,7 +132,7 @@
 <div id="containerChat">
 	
 <div id="contato">
-	<a id = "voltar" href="/"><img src="https://cdn-icons-png.flaticon.com/128/566/566092.png" height= "20px"></img></a>
+	<a id = "voltar" href="/"><img src="left-arrow.png" height= "20px"></img></a>
 	<h1 id="nome">...</h1>
 	<span id = "writing">digitando...</span>
 
@@ -181,17 +181,28 @@ var id ={{id}}
   
 	result.innerHTML = '<p class="n">Procurando participante...</p>'
 	const headers = { 'Content-Type': 'application/json'}
-	fetch('/api/loading', {method: 'post', headers}).then(
+	fetch('/api/loading/{{modo}}', {method: 'post', headers}).then(
 		resp => {
 					return resp.json() 
 		}).then(json => {
-		
+					console.log('sexo> '+json.sex)
 					if(json.m == true){
 			
 					document.getElementById('result').innerHTML = ''
 					document.getElementById('result').innerHTML += '<p class="n">Você já está falando com alguém! Diga oi!</p>'
 					document.getElementById('form').innerHTML =  '<div style="display: flex;flex-wrap: wrap; justify-content: center;"><input id="texto" name="texto" type="text" onkeyup="writing()"><input type="submit" value="enviar"></div><button onclick="end()">Encerrar conversa</button>'
 					document.getElementById('nome').innerHTML = json.nome
+					
+					if(json.sex == 1){
+						document.getElementById('nome').innerHTML += '<img src="simbolo-feminino.png" alt="não binário">'
+					}
+					if(json.sex == 0){
+						document.getElementById('nome').innerHTML += '<img src="sexo-feminino.png" alt="não binário">'
+					}
+					if(json.sex == 2){
+					document.getElementById('nome').innerHTML += '<img src="nao-binario.png" alt="não binário">'
+					}
+
 				
 					id = json.id;
 					procuraMensagens()
@@ -220,7 +231,7 @@ var id ={{id}}
 	function procuraMensagens() {
 	const headers = { 'Content-Type': 'application/json'}
 	
-	fetch('/api/resp', {method: 'post', headers}).then(
+	fetch('/api/resp/{{modo}}', {method: 'post', headers}).then(
 		resp => {
 					return resp.json()
 				

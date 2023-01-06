@@ -45,9 +45,11 @@ app.use(expressSession({
 var id = 0
 var mensagens = {}
 var onlineUsers = []
+var crushs = []
 var blacklist = []
+
 var names = {}
-var sex = {}
+var sexo = {}
 var writing = []
 
 //definindo o middleware de mensagens flash
@@ -96,7 +98,8 @@ app.get('/', (req, res) => {
   
  app.get('/politicadecookies', (req, res) => {
 	res.render('cookies')
- }) 
+ })
+
 
    
 app.get('/chat',(req, res) => {
@@ -121,10 +124,45 @@ app.get('/chat',(req, res) => {
 		 
 	mensagens[user.id] = []
 		 
-	res.render('chat')
+	res.render('chat', {modo: 'onlineUsers'})
 	
 		
 }})  
+
+app.get('/crushs',(req, res) => {
+	if(onlineUsers.indexOf(req.session.name)  != -1){
+			onlineUsers.splice(onlineUsers.indexOf(req.session.name), 1)
+			res.redirect('/')
+		
+	}else{
+		if(crushs.indexOf(req.session.name)  != -1){
+			onlineUsers.splice(onlineUsers.indexOf(req.session.name), 1)
+			res.redirect('/')
+		}else{
+
+			crushs.push(req.session.name) 
+		if(req.cookies.myName != undefined && req.cookies.myName.length <= 10 && req.cookies.myName.length != 0){
+				names[req.session.name] = req.cookies.myName
+			}
+
+		if(req.cookies.sex != undefined){
+			sexo[req.session.name] = req.cookies.sex
+		}
+		
+		
+
+			
+	var user = {id: req.session.name,
+						position: onlineUsers.indexOf(req.session.name)
+						} 
+						
+	 
+mensagens[user.id] = []
+	 
+res.render('chat', {modo: 'crushs'})
+
+	
+}}})
 
 
 
@@ -169,7 +207,20 @@ app.post('/api/send', (req, res) => {
 	
 	}  
 })   
-app.post('/api/resp', (req, res) => {
+app.post('/api/resp/:modo', (req, res) => {
+
+	let modo = null;
+	
+	switch (req.params.modo) {
+		case 'normal':
+			modo = onlineUsers;
+		  break;
+		case 'crushs':
+			modo = crushs;
+		  	break;
+		default:
+			modo = onlineUsers;;
+	  }
 
 	let wr = false;
 
@@ -183,15 +234,15 @@ app.post('/api/resp', (req, res) => {
 	
 	
 	
-	if(onlineUsers.indexOf(req.session.name) == -1){
+	if(modo.indexOf(req.session.name) == -1){
 		res.send({meOffline: true})
 	}else{
 	
 	
-	if(onlineUsers.indexOf(req.session.dest) == -1){//O destino está online? se não, tchauzinho! 
+	if(modo.indexOf(req.session.dest) == -1){//O destino está online? se não, tchauzinho! 
 		req.session.dest = null
-		var pos = onlineUsers.indexOf(req.session.name)
-		onlineUsers.splice(pos, 1)
+		var pos = modo.indexOf(req.session.name)
+		modo.splice(pos, 1)
 	
 		
 		res.send({offline: true})
@@ -222,15 +273,29 @@ app.post('/api/resp', (req, res) => {
 
 
    
- app.post('/api/loading', (req, res) =>{
+ app.post('/api/loading/:modo', (req, res) =>{
+	let modo = null;
+	
+	switch (req.params.modo) {
+		case 'normal':
+			modo = onlineUsers;
+		  break;
+		case 'crushs':
+			modo = crushs;
+		  	break;
+		default:
+			modo = onlineUsers;;
+	  }
+	  
 
 	 var user = {
 		name: "???",
 		id: req.session.name,
-		position: onlineUsers.indexOf(req.session.name)
+		position: modo.indexOf(req.session.name),
+		sex: null
 		} 
 	
-		 if(onlineUsers.indexOf(req.session.name) === undefined){
+		 if(modo == -1){
 		
 			res.send({m: 'erro'})
 	 }else{
@@ -240,21 +305,29 @@ app.post('/api/resp', (req, res) => {
 
 	 if(user.position % 2 != 0){//A posição do úsuario no array é impar? se sim, seu destino é uma posição atrás no array
 		var i =  user.position-1
-		user.dest = onlineUsers[i]
+		user.dest = modo[i]
 		req.session.dest = user.dest
 		if(names[req.session.dest] != undefined && names[req.session.dest] != ''){
 			user.name=names[req.session.dest]
 		}
-		res.send({m:true, nome: user.name, id: req.session.dest})
+		if(sexo[req.session.dest] != undefined){
+			user.sex = sexo[req.session.dest]
+		}
+		res.send({m:true, nome: user.name, id: req.session.dest, sex: user.sex})
 		
 	}else{	//Você é par,  Seu destino estará uma casa a frente...
 		let pos = user.position+1
-		if(onlineUsers[pos] !== undefined && names[req.session.dest] != ''){
-			req.session.dest = onlineUsers[pos]
-			if(names[req.session.dest] != undefined && names[req.session.dest] != ''){
+		if(modo[pos] !== undefined && names[req.session.dest] != ''){
+			req.session.dest = modo[pos]
+			if(names[req.session.dest] != undefined){
 				user.name = names[req.session.dest]
 			}
-			res.send({m:true, nome: user.name, id: req.session.dest})
+			console.log(sexo,sexo[req.session.dest])
+			if(sexo[req.session.dest] != undefined){
+				user.sex = sexo[req.session.dest]
+				
+			}
+			res.send({m:true, nome: user.name, id: req.session.dest, sex: user.sex})
 		}else{
 		res.send({m:false})
 		}
@@ -275,20 +348,25 @@ app.post('/api/resp', (req, res) => {
   
  app.post('/api/bye', (req, res) => {
 	var pos = onlineUsers.indexOf(req.session.name)
-	
+	var pos2 = crushs.indexOf(req.session.name)
 	mensagens[req.session.name] = []
 	writing.splice(writing.indexOf(req.session.name), 1)
 
 
-	if(pos == -1){
-		res.end()
-	}else{
-	 onlineUsers.splice(pos, 1)
-	 	delete names[req.session.name]
+	if(pos != -1){
+		onlineUsers.splice(pos, 1)
+	}
+	if(pos2 != -1){
+		crushs.splice(pos2, 1)
+	}
+	 
+	 
+	 delete names[req.session.name]
+	 delete sexo[req.session.name]
 	
 	res.end()
 	
-	}
+	
  })
   
 // página 404 personalizada 

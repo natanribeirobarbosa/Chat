@@ -21,6 +21,8 @@
 <label for="mascu">Masculino</label>
 <input id = "fem" type="radio" name="sexo" value= "1">
 <label for="mascu">Feminino</label>
+<input id = "nbin" type="radio" name="sexo" value= "2">
+<label for="nbin">Não binário</label>
 </div>
 
 <div id = "salvar"><button onclick="salvar()">Salvar</button><span id="result" style="color: green;"></span></div>
@@ -37,6 +39,7 @@ var data = new Date(2025,0,01);
 data = data.toGMTString();
 
 document.getElementById('nome').value = valor_cookie('myName')
+document.querySelector('input[value="'+valor_cookie('sex')+'"]').checked = true;
 
 function salvar(){
 // Cria o cookie
