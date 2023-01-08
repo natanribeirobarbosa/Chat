@@ -47,6 +47,7 @@ var mensagens = {}
 var onlineUsers = []
 var crushs = []
 var blacklist = []
+var acessos = 0
 
 var names = {}
 var sexo = {}
@@ -72,8 +73,10 @@ app.use((req, res, next) => {
 })
 
 
-app.get('/', (req, res) => {
 
+
+app.get('/', (req, res) => {
+	acessos = acessos+1
 		if(req.cookies.novo == undefined){//Recebe um novo id caso seja sua primeira vez no site
 		res.locals.flash = {message:'<p>O nosso site não funciona sem os cookies, ao continuar navegando, você concorda com a nossa <a href="/politicadecookies">política de cookies</a>.</p> <button onclick= "fechar()">ok</button>', type:'main', time: 1000} 
 		res.locals.newU = '<p class="text">No Ifriends você pode conversar com pessoas aleatórias e desconhecidas com apenas um clique! Sem cadastro!</p> <p class="text">Para conversar basta clicar em <strong>conversa aleatória</strong>. Em <strong>configurações</strong> você pode mudar o seu nome e outras informações.</p>'
@@ -110,6 +113,11 @@ app.get('/chat',(req, res) => {
 			
 		}else{
 				onlineUsers.push(req.session.name) 
+
+				if(blacklist.indexOf(req.session.name) != -1){
+					blacklist.push(req.session.name)
+				}
+
 			if(req.cookies.myName != undefined && req.cookies.myName.length <= 10){
 					names[req.session.name] = req.cookies.myName
 				}else{
@@ -140,7 +148,10 @@ app.get('/crushs',(req, res) => {
 			res.redirect('/')
 		}else{
 
-			crushs.push(req.session.name) 
+			crushs.push(req.session.name)
+			if(blacklist.indexOf(req.session.name) != -1){
+				blacklist.push(req.session.name)
+			}
 		if(req.cookies.myName != undefined && req.cookies.myName.length <= 10 && req.cookies.myName.length != 0){
 				names[req.session.name] = req.cookies.myName
 			}
@@ -172,8 +183,17 @@ blacklistfunc()
 
 	 for(let index = 0; index < blacklist.length; index++){
 			var user = blacklist[index]
+			var pos = onlineUsers.indexOf(user)
+			var pos2 = crushs.indexOf(user)
+			
 
-			onlineUsers.splice(onlineUsers.indexOf(user), 1)
+			if(pos != -1){
+				onlineUsers.splice(pos, 1)
+			}
+			
+			if(pos2 != -1){
+				crushs.splice(pos2, 1)
+			}
 			blacklist.splice(index, 1)
 
 }
@@ -322,7 +342,7 @@ app.post('/api/resp/:modo', (req, res) => {
 			if(names[req.session.dest] != undefined){
 				user.name = names[req.session.dest]
 			}
-			console.log(sexo,sexo[req.session.dest])
+			
 			if(sexo[req.session.dest] != undefined){
 				user.sex = sexo[req.session.dest]
 				
@@ -367,6 +387,13 @@ app.post('/api/resp/:modo', (req, res) => {
 	res.end()
 	
 	
+ })
+
+ app.get('/administrador', (req, res, next) => {
+	if(req.cookies.admin == 'meusDados'){
+		res.render('admin',{online: onlineUsers.length, crushs: crushs.length, acessos: acessos})
+	}else{
+	next()}
  })
   
 // página 404 personalizada 

@@ -36,7 +36,30 @@ quais assuntos puxar">
 	color: black;
 	}
 	html{
-		height: 100%;
+		min-height: 100%;
+	}
+		
+	body{
+		display: flex;
+
+		padding: 10px;
+		margin: 0px;
+		background-color: rgb(233 233 233 / 40%);
+		gap:5px;
+		align-items: center;
+		justify-content: center;
+		min-height: 100vh;
+		box-sizing: border-box;
+	}
+
+	#container{
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		max-width: 900px;
+		align-items: center;
+		min-height: 100%;
+		justify-content: center;
 	}
 	
 		#logo{
@@ -68,9 +91,9 @@ quais assuntos puxar">
 		content : "🔗";
 		
 	}
-
-	.text{
+	.text {
 		letter-spacing: 1px;
+		max-width: 600px;
 	}
 	
 	button>a{
@@ -109,29 +132,9 @@ quais assuntos puxar">
     border-radius: 15px;
     border: 1px solid silver;
 }
-	
-	body{
-	    display: flex;
-  
-    padding: 10px;
-    margin: 0px;
-	 background-color: rgb(233 233 233 / 40%);
-	 gap:5px;
-	     align-items: center;
-		     justify-content: center;
-			 height: 100%;
-			 box-sizing: border-box;
-	}
 
-	#container{
-		display: flex;
-		flex-direction: column;
-		width: 100%;
-		max-width: 900px;
-		align-items: center;
-		height: 100%;
-		justify-content: center;
-	}
+
+
 
 	
 	#flash2{

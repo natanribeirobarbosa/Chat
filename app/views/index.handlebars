@@ -5,9 +5,17 @@
 
 {{#section 'style'}}
 <style>
+    .anuncio h1, .anuncio h2{
+        margin: 10px;
+    }
+
    #item{
     max-height: 150px; 
     margin: 10px;
+   }
+
+   .logotipo{
+    height: 14px;
    }
 
 	
@@ -84,10 +92,22 @@
         font-size: 12px;
         margin: 0px;
     }
+    .anuncio h2{
+        margin: 0;
+        font-size: 22px;
+    }
 
     #item{
-    height: 130%;
-    margin: 10px;
+    height: 100%;
+
+    }
+
+    .logotipo{
+            height: 10px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 5px;
     }
 
 
@@ -99,7 +119,8 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    gap: 1px;
+    gap: 0px;
+    height: 100%;
   
     }
 </style>
@@ -195,8 +216,10 @@ data = data.toGMTString();
 
 <div class="anuncio anuncio1">
     <div>
-    <img style="height: 15px;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/603px-Amazon_logo.svg.png" alt="">
+    <img class="logotipo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/603px-Amazon_logo.svg.png" alt="">
     <h1>Osram - Lâmpada Led Bulbo RGB, 7.5W</h1>
+    <span style="font-size: 12px;">De: <span  style="font-size: 12px; text-decoration:line-through;">75,00</span> por apenas:</span>
+    <h2>59,90</h2>
     </div>
 
     <div class="div2">
@@ -207,8 +230,10 @@ data = data.toGMTString();
 
 <div class="anuncio2 anuncio">
     <div>
-    <img style="height: 15px;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/603px-Amazon_logo.svg.png" alt="">
+    <img class="logotipo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/603px-Amazon_logo.svg.png" alt="">
     <h1>Osram - Lâmpada Led Bulbo RGB, 7.5W</h1>
+    <span style="font-size: 12px;">De: <span  style="font-size: 12px; text-decoration:line-through;">75,00</span> por apenas:</span>
+    <h2>59,90</h2>
     </div>
 
     <div class="div2">
