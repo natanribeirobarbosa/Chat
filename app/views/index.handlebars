@@ -5,7 +5,12 @@
 
 {{#section 'style'}}
 <style>
-   
+   #item{
+    max-height: 150px; 
+    margin: 10px;
+   }
+
+	
 	
 
     footer{
@@ -39,6 +44,64 @@
     text-decoration: underline;
 	
 	}
+
+    @media (max-width:900px) {
+    .anuncio{
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 95%;
+    max-width: 800px;
+    margin: 10px auto;
+    justify-content: space-around;
+    flex-direction: row;
+    height: 13%;
+    padding: 10px;
+    box-sizing: border-box;
+   
+    }
+
+    .anuncio1{
+        display: none;
+    }
+
+    .anuncio button a {
+        font-size: 13px;
+    }
+
+    .anuncio div{
+       
+            align-content: center;
+
+        gap: 10px;
+    height: 80%;
+    }
+    .anuncio .div2{
+            flex-direction: row;
+    }
+
+    .anuncio h1{
+        font-size: 12px;
+        margin: 0px;
+    }
+
+    #item{
+    height: 130%;
+    margin: 10px;
+    }
+
+
+    }
+
+         .anuncio div{
+     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 1px;
+  
+    }
 </style>
 {{/section}}
 
@@ -130,3 +193,26 @@ data = data.toGMTString();
 </div>
 </footer>
 
+<div class="anuncio anuncio1">
+    <div>
+    <img style="height: 15px;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/603px-Amazon_logo.svg.png" alt="">
+    <h1>Osram - Lâmpada Led Bulbo RGB, 7.5W</h1>
+    </div>
+
+    <div class="div2">
+    <img id="item" src="https://m.media-amazon.com/images/I/61jjguqonVL._AC_SL1500_.jpg" alt="">
+    <button class="link"><a target="_blank" href="https://amzn.to/3VP9IFj">comprar</a></button>
+    </div>
+</div>
+
+<div class="anuncio2 anuncio">
+    <div>
+    <img style="height: 15px;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/603px-Amazon_logo.svg.png" alt="">
+    <h1>Osram - Lâmpada Led Bulbo RGB, 7.5W</h1>
+    </div>
+
+    <div class="div2">
+    <img id="item" src="https://m.media-amazon.com/images/I/61jjguqonVL._AC_SL1500_.jpg" alt="">
+    <button class="link"><a target="_blank" href="https://amzn.to/3VP9IFj">comprar</a></button>
+    </div>
+</div>
