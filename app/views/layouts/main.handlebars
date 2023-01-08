@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="robots" content="index"/>
-    <meta name="keywords" content="conversa com aleatório,
+    <meta name="keywords" content="conversa com aleatório,ifriends,
 falar com aleatórios,
 conversa aleatoria,
 conversa aleatoria online,
@@ -191,6 +191,21 @@ quais assuntos puxar">
 		}
 	}
 	
+	.anuncio{
+    position: absolute;
+    left: 0;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-image: radial-gradient(#d5d1d1, transparent);
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid silver;
+	}
+	.anuncio h1{
+		font-size: 15px;
+	}
 	
 
 </style>
@@ -253,8 +268,17 @@ function valor_cookie(nome_cookie) {
 	
 	<body id="body">
 <div id="container">
+	<div class="anuncio">
+    <img style="height: 15px;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/603px-Amazon_logo.svg.png" alt="">
+    <h1>Osram - Lâmpada Led Bulbo RGB, 7.5W</h1>
+    
+    <img style="max-height: 150px; margin: 10px" src="https://m.media-amazon.com/images/I/61jjguqonVL._AC_SL1500_.jpg" alt="">
+    <button class="link"><a target="_blank" href="https://amzn.to/3VP9IFj">comprar</a></button>
+</div>
+
 
 	<h1 id="logo"><a href="/">Ifriends</a></h1>
+
 				{{{body}}}
 
 	

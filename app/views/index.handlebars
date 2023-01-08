@@ -1,6 +1,6 @@
 {{#section 'head'}}
     <meta name="description" content="Fale com desconhecidos online! Aperte apenas um botão, sem cadastro, papo livre, para amizade ou paquera!">
-    <title>Ifriends</title>
+    <title>Fale com desconhecidos online! Aperte apenas um botão, sem cadastro, papo livre, para amizade ou paquera!</title>
 {{/section}}
 
 {{#section 'style'}}
@@ -52,19 +52,20 @@
     gap: 5px;
 ">
 
-{{#if newU}}
-{{{newU}}}
-{{/if}}
+
 
 <button class="link"><a href="/chat">Conversa <strong>aleatória</strong></a></button>
 <button class="link"><a href="/crushs">Crush's🖤</a></button>
 <button class="link"><a href="/config">Configurações ⚙</a></button>
 </div>
-<ul id = "contatos">
+{{#if newU}}
+{{{newU}}}
+{{/if}}
 
-<ul>
 
 
+
+{{#section 'script'}}
 <script>
 
 
@@ -110,7 +111,7 @@ data = data.toGMTString();
 	
 
 </script>
-
+{{/section}}
 
 	<footer>
 
