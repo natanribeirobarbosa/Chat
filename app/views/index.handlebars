@@ -5,8 +5,49 @@
 
 {{#section 'style'}}
 <style>
+    .anuncio{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    height: fit-content;
+	width: 10%;
+    margin: auto 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid silver;
+	    background-image: radial-gradient(#edededb8, #efefef);
+	}
+	.anuncio h1{
+		font-size: 15px;
+	}
+	.anuncio1{
+	left: 0;
+	
+	}
+
+
+	.anuncio2{
+		right: 0;
+
+	}
     .anuncio h1, .anuncio h2{
         margin: 10px;
+    }
+
+    
+         .anuncio div{
+     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0px;
+    height: 100%;
+  
     }
 
    #item{
@@ -56,6 +97,7 @@
 
     @media (max-width:900px) {
     .anuncio{
+        top: inherit;
     bottom: 0;
     left: 0;
     right: 0;
@@ -64,7 +106,7 @@
     margin: 10px auto;
     justify-content: space-around;
     flex-direction: row;
-    height: 13%;
+    height: 13vh;
     padding: 10px;
     box-sizing: border-box;
     position: fixed;
@@ -83,7 +125,7 @@
        
             align-content: center;
 
-        gap: 10px;
+       
     height: 80%;
     }
     .anuncio .div2{
@@ -115,16 +157,6 @@
 
     }
 
-         .anuncio div{
-     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    gap: 0px;
-    height: 100%;
-  
-    }
 </style>
 {{/section}}
 
@@ -147,14 +179,26 @@
 {{#if newU}}
 {{{newU}}}
 {{/if}}
-<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Libero ex praesentium accusantium nisi non itaque dolore iure ipsa eius quia doloribus accusamus voluptatem magni vel possimus quo adipisci, tempora dolor.</p>
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus aspernatur odio mollitia nesciunt error dolorum nihil voluptatibus sequi illo. Deserunt animi expedita aspernatur necessitatibus excepturi magnam dolorum quod consequuntur alias.</p>
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate molestiae adipisci vitae rerum soluta et quidem ipsam nemo, pariatur placeat iusto dignissimos tempore veniam, quos culpa repellendus hic ducimus dolorem.</p>
-<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Libero ex praesentium accusantium nisi non itaque dolore iure ipsa eius quia doloribus accusamus voluptatem magni vel possimus quo adipisci, tempora dolor.</p>
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus aspernatur odio mollitia nesciunt error dolorum nihil voluptatibus sequi illo. Deserunt animi expedita aspernatur necessitatibus excepturi magnam dolorum quod consequuntur alias.</p>
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate molestiae adipisci vitae rerum soluta et quidem ipsam nemo, pariatur placeat iusto dignissimos tempore veniam, quos culpa repellendus hic ducimus dolorem.</p>
+<p class="text">O Ifriends é um site de conversa aleatória em que você pode falar com qualquer pessoa com apenas um clique. Escolha entre ser um úsuario completamente anônimo ou opite por ter um nome e mostrar o seu gênero para as pessoas.</p>
+<p class="text">Fale com desconhecidos clicando em <strong>conversa aleatória</strong>, ou se preferir mostrar o seu gênero para o parceiro do chat online, clique em <strong>crush's</strong>.</p>
+
+<h2 class="text">Como iniciar uma conversa? ou puxar assunto na internet?</h2>
+<ol class="text">
+    <li><h3>Não seja um primata.</h3>
+        <p>Por ser um chat anônimo, muitas pessoas aproveitam para agir de forma desagradável e deixando fluir o seu primata interior. Seja melhor que isso.</p>
+    </li>
+
+    <li><h3>Comece com o clássico, ou não...</h3>
+        <p>O clássico "Oi! Tudo bem?" é o mais comum para quebrar o gelo, e nas suas respostas, sempre puxe o assunto para algo interessante, fazendo das respostas novas perguntas, ao invés de apenas responder "sim" e "não", resumindo, seja criativo!</p>
+    </li>
+
+    
+    <li><h3>Pergunte, e fale de si mesmo.</h3>
+        <p>Todo mundo gosta de falar de si mesmo e de como é incrível, fale sobre os seus interesses e pergunte os da pessoa também.</p>
+    </li>
 
 
+</ol>
 
 {{#section 'script'}}
 <script>
