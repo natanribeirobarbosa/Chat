@@ -15,9 +15,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-
+    gap: 5px;
     border-radius: 10px;
-    padding: 10px;
+    padding: 5px;
     border: 1px solid silver;
 	    background-image: radial-gradient(#edededb8, #efefef);
 	}
@@ -35,7 +35,8 @@
 
 	}
     .anuncio h1, .anuncio h2{
-        margin: 10px;
+        margin: 0;
+        margin-top: 5px;
     }
 
     
@@ -51,15 +52,20 @@
     }
 
    #item{
-    max-height: 150px; 
-    margin: 10px;
+    max-height: 100%;
+    max-width: 55%;
+   
    }
 
    .logotipo{
-    height: 14px;
+        height: 14px;
    }
 
-	
+	.anuncio .div1{
+        line-height: 1em;
+        max-width: 50%;
+       
+    }
 	
 
     footer{
@@ -111,7 +117,7 @@
     justify-content: space-around;
     flex-direction: row;
     height: 13vh;
-    padding: 10px;
+
     box-sizing: border-box;
     position: fixed;
    
@@ -126,11 +132,8 @@
     }
 
     .anuncio div{
-       
+        gap: 5px;
             align-content: center;
-
-       
-    height: 80%;
     }
     .anuncio .div2{
             flex-direction: row;
@@ -141,12 +144,11 @@
         margin: 0px;
     }
     .anuncio h2{
-        margin: 0;
+ 
         font-size: 22px;
     }
 
     #item{
-    height: 100%;
 
     }
 
@@ -270,29 +272,36 @@ data = data.toGMTString();
 </footer>
 
 <div class="anuncio anuncio1">
-    <div>
+    <div class="div1">
     <img class="logotipo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/603px-Amazon_logo.svg.png" alt="">
-    <h1>Osram - Lâmpada Led Bulbo RGB, 7.5W</h1>
-    <span style="font-size: 12px;">De: <span  style="font-size: 12px; text-decoration:line-through;">75,00</span> por apenas:</span>
-    <h2>59,90</h2>
+    <h1>{{product.title}}</h1>
+    
+           {{#if product.oldPrice}}
+        <span style="font-size: 12px;">De: {{product.oldPrice}}<span  style="font-size: 12px; text-decoration:line-through;"></span> por apenas:</span>
+        {{/if}}
+        <h2>{{product.price}}</h2>
     </div>
 
+
     <div class="div2">
-    <img id="item" src="https://m.media-amazon.com/images/I/61jjguqonVL._AC_SL1500_.jpg" alt="">
-    <button class="link"><a target="_blank" href="https://amzn.to/3VP9IFj">comprar</a></button>
+    <img id="item" src="{{product.image}}" alt="">
+    <button class="link"><a target="_blank" href="{{product.link}}">comprar</a></button>
     </div>
 </div>
 
-<div class="anuncio2 anuncio">
-    <div>
+<div class="anuncio anuncio2">
+    <div class="div1">
     <img class="logotipo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/603px-Amazon_logo.svg.png" alt="">
-    <h1>Osram - Lâmpada Led Bulbo RGB, 7.5W</h1>
-    <span style="font-size: 12px;">De: <span  style="font-size: 12px; text-decoration:line-through;">75,00</span> por apenas:</span>
-    <h2>59,90</h2>
+    <h1>{{product.title}}</h1>
+   
+        {{#if product.oldPrice}}
+        <span style="font-size: 12px;">De: <span  style="font-size: 12px; text-decoration:line-through;">{{product.oldPrice}} </span> por apenas:</span>
+        {{/if}}
+    <h2>{{product.price}}</h2>
     </div>
 
     <div class="div2">
-    <img id="item" src="https://m.media-amazon.com/images/I/61jjguqonVL._AC_SL1500_.jpg" alt="">
-    <button class="link"><a target="_blank" href="https://amzn.to/3VP9IFj">comprar</a></button>
+    <img id="item" src="{{product.image}}" alt="">
+    <button class="link"><a target="_blank" href="{{product.link}}">comprar</a></button>
     </div>
 </div>

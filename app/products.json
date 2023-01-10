@@ -1,6 +1,47 @@
 
 {
-    "products": {
-        "produto1": "valor"
-    }
+    "products": [
+        {
+            "title": "Osram - Lâmpada Led Bulbo RGB, 7.5W",
+            "oldPrice": "75,00",
+            "price": "59,90",
+            "image": "https://m.media-amazon.com/images/I/61jjguqonVL._AC_SL1500_.jpg",
+            "link": "https://amzn.to/3VP9IFj"
+        },
+        {
+            "title": "Smart Lâmpada Wi-Fi, Colorido RGB - Compatível com Alexa",
+            "oldPrice": "109,00",
+            "price": "54,90",
+            "image": "https://m.media-amazon.com/images/I/71gze3HhCTL._AC_SL1500_.jpg",
+            "link": "https://www.amazon.com.br/L%C3%A2mpada-Positivo-Casa-Inteligente-Compat%C3%ADvel/dp/B082FTRR76?pd_rd_w=mJZtI&content-id=amzn1.sym.b84c4b85-d0b6-44ab-b250-acbd7d0f923e&pf_rd_p=b84c4b85-d0b6-44ab-b250-acbd7d0f923e&pf_rd_r=XFRSTDFWJEDM2NDHTYV4&pd_rd_wg=wcXqC&pd_rd_r=400be0bd-2a7e-463f-8002-2b2c4c46b346&pd_rd_i=B082FTRR76&psc=1&linkCode=ll1&tag=natanribeiro-20&linkId=3f58ba59a740515ee5d3b608e2c745f3&language=pt_BR&ref_=as_li_ss_tl"
+        },
+         {
+            "title": "Fone de Ouvido Xiaomi Redmi Airdots Com Bluetooth",
+            "oldPrice": "99,00",
+            "price": "169,90 ",
+            "image": "https://m.media-amazon.com/images/I/51Ea75HKxzL._AC_SL1000_.jpg",
+            "link": "https://www.amazon.com.br/Ouvido-Xiaomi-Redmi-Airdots-Bluetooth/dp/B07R5PSTC9?pd_rd_w=edJdN&content-id=amzn1.sym.b84c4b85-d0b6-44ab-b250-acbd7d0f923e&pf_rd_p=b84c4b85-d0b6-44ab-b250-acbd7d0f923e&pf_rd_r=XFRSTDFWJEDM2NDHTYV4&pd_rd_wg=wcXqC&pd_rd_r=400be0bd-2a7e-463f-8002-2b2c4c46b346&pd_rd_i=B07R5PSTC9&psc=1&linkCode=ll1&tag=natanribeiro-20&linkId=3e0a29ed3e7d57b1d1dba793cf8de7ee&language=pt_BR&ref_=as_li_ss_tl"
+        },
+        {
+            "title": "Cadeira Gamer NITRO Preto e Vermelho",
+            "oldPrice": false,
+            "price": "799,00",
+            "image": "https://m.media-amazon.com/images/I/51UFUNWIYZL._AC_SL1000_.jpg",
+            "link": "https://www.amazon.com.br/Cadeira-Escrit%C3%B3rio-Gamer-MoobX-Nitro/dp/B08NRD2WB2?pd_rd_w=hf9z3&content-id=amzn1.sym.b84c4b85-d0b6-44ab-b250-acbd7d0f923e&pf_rd_p=b84c4b85-d0b6-44ab-b250-acbd7d0f923e&pf_rd_r=RJQVDQB39TC8FH13GR04&pd_rd_wg=Gs1sh&pd_rd_r=f1dadc11-ce12-43fb-9c86-89d4fec9f447&pd_rd_i=B08NRD2WB2&psc=1&linkCode=ll1&tag=natanribeiro-20&linkId=f30cebd6b5f5a1c861328adf63a1643e&language=pt_BR&ref_=as_li_ss_tl"
+        },
+        {
+            "title": "Luminaria 3D Touch Lua Cheia Abajur LED Decoracao USB RGB",
+            "oldPrice": false,
+            "price": "59,20",
+            "image": "https://m.media-amazon.com/images/I/51PWJJSpjQL._AC_SL1000_.jpg",
+            "link": "https://www.amazon.com.br/Luminaria-Touch-Cheia-Abajur-Decoracao/dp/B07NDXS9L3?pd_rd_w=eTdbn&content-id=amzn1.sym.b84c4b85-d0b6-44ab-b250-acbd7d0f923e&pf_rd_p=b84c4b85-d0b6-44ab-b250-acbd7d0f923e&pf_rd_r=KWR5N1FQ4SCVK46F54VW&pd_rd_wg=WLxSU&pd_rd_r=5fde2357-4977-459c-82bd-ae04dbd1217d&pd_rd_i=B07NDXS9L3&psc=1&linkCode=ll1&tag=natanribeiro-20&linkId=c6df37a24296d73be4537b89678ff33e&language=pt_BR&ref_=as_li_ss_tl"
+        },
+        {
+            "title": "Console Nintendo Switch Oled - Branco",
+            "oldPrice": false,
+            "price": "2,699",
+            "image": "https://m.media-amazon.com/images/I/51fzaeubdsL._AC_SL1192_.jpg",
+            "link": "https://www.amazon.com.br/Nintendo-Interruptor-polegadas-armazenamento-Bluetooth/dp/B09KMW2N9Z?psc=1&linkCode=ll1&tag=natanribeiro-20&linkId=3c82a4628280cff20acd1e3c37b667a1&language=pt_BR&ref_=as_li_ss_tl"
+        }
+    ]
 }

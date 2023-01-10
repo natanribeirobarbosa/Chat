@@ -82,13 +82,18 @@ app.get('/', (req, res) => {
 	acessos = acessos+1
 		if(req.cookies.novo == undefined){//Recebe um novo id caso seja sua primeira vez no site
 		res.locals.flash = {message:'<p>O nosso site não funciona sem os cookies, ao continuar navegando, você concorda com a nossa <a href="/politicadecookies">política de cookies</a>.</p> <button onclick= "fechar()">ok</button>', type:'main', time: 1000} 
-		res.locals.newU = '<p class="text">No Ifriends você pode conversar com pessoas aleatórias e desconhecidas com apenas um clique! Sem cadastro!</p> <p class="text">Para conversar basta clicar em <strong>conversa aleatória</strong>. Em <strong>configurações</strong> você pode mudar o seu nome e outras informações.</p>'
 		id++ 
 		req.session.name = id
 		
 		}
 
-	res.render('index')
+		function getRandomInt(max) {
+			return Math.floor(Math.random() * max);
+		  }
+		let a = products.products[getRandomInt(products.products.length)];
+		
+
+	res.render('index', {product: a})
 })
 
 
@@ -397,6 +402,14 @@ app.post('/api/resp/:modo', (req, res) => {
 		res.render('admin',{online: onlineUsers.length, crushs: crushs.length, acessos: acessos, id: id})
 	}else{
 	next()}
+ })
+
+ app.post('/products', (req, res) => {
+	function getRandomInt(max) {
+		return Math.floor(Math.random() * max);
+	  }
+	let a = getRandomInt(products.products.length);
+	res.json(products.products[a])
  })
   
 // página 404 personalizada 
