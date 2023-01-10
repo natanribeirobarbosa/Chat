@@ -5,6 +5,8 @@ const flash = require('./lib/middleware/flash')
 
 const port = process.env.PORT || 8080
 const { credentials } = require('./config')
+const { products } = require('./config')
+
 
 //definindo o renderizador padrão 
 app.set('views', path.join(__dirname, 'views'));
@@ -41,7 +43,8 @@ app.use(expressSession({
 }))
   
   
- 
+
+
 var id = 0
 var mensagens = {}
 var onlineUsers = []
@@ -114,7 +117,7 @@ app.get('/chat',(req, res) => {
 		}else{
 				onlineUsers.push(req.session.name) 
 
-				if(blacklist.indexOf(req.session.name) != -1){
+				if(blacklist.indexOf(req.session.name) == -1){
 					blacklist.push(req.session.name)
 				}
 
@@ -144,12 +147,12 @@ app.get('/crushs',(req, res) => {
 		
 	}else{
 		if(crushs.indexOf(req.session.name)  != -1){
-			onlineUsers.splice(onlineUsers.indexOf(req.session.name), 1)
+			crushs.splice(crushs.indexOf(req.session.name), 1)
 			res.redirect('/')
 		}else{
 
 			crushs.push(req.session.name)
-			if(blacklist.indexOf(req.session.name) != -1){
+			if(blacklist.indexOf(req.session.name) == -1){
 				blacklist.push(req.session.name)
 			}
 		if(req.cookies.myName != undefined && req.cookies.myName.length <= 10 && req.cookies.myName.length != 0){
@@ -391,7 +394,7 @@ app.post('/api/resp/:modo', (req, res) => {
 
  app.get('/administrador', (req, res, next) => {
 	if(req.cookies.admin == 'meusDados'){
-		res.render('admin',{online: onlineUsers.length, crushs: crushs.length, acessos: acessos})
+		res.render('admin',{online: onlineUsers.length, crushs: crushs.length, acessos: acessos, id: id})
 	}else{
 	next()}
  })
