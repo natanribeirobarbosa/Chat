@@ -122,9 +122,7 @@ app.get('/chat',(req, res) => {
 		}else{
 				onlineUsers.push(req.session.name) 
 
-				if(blacklist.indexOf(req.session.name) == -1){
-					blacklist.push(req.session.name)
-				}
+
 
 			if(req.cookies.myName != undefined && req.cookies.myName.length <= 10){
 					names[req.session.name] = req.cookies.myName
@@ -133,9 +131,7 @@ app.get('/chat',(req, res) => {
 				}
 
 				
-		var user = {id: req.session.name,
-							position: onlineUsers.indexOf(req.session.name)
-							} 
+		var user = {id: req.session.name} 
 							
 		 
 	mensagens[user.id] = []
@@ -171,8 +167,7 @@ app.get('/crushs',(req, res) => {
 		
 
 			
-	var user = {id: req.session.name,
-						position: onlineUsers.indexOf(req.session.name)
+	var user = {id: req.session.name
 						} 
 						
 	 
@@ -358,6 +353,9 @@ app.post('/api/resp/:modo', (req, res) => {
 		}else{
 		res.send({m:false})
 		}
+	}
+	if(blacklist.indexOf(req.session.name) == -1){
+		blacklist.push(req.session.name)
 	}
 	 
  })
