@@ -327,7 +327,7 @@ app.post('/api/resp/:modo', (req, res) => {
 	
 	
 	
-	
+	console.log(user.position)
 
 
 	 if(user.position % 2 != 0){//A posição do úsuario no array é impar? se sim, seu destino é uma posição atrás no array
