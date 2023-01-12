@@ -1,7 +1,32 @@
-<h1>Administrador</h1>
-<h2>Pessoas online:</h2>
-<p>Conversa aleatória: {{online}}, Crushs: {{crushs}}.</p>
+<style>
+    #logo{
+        display: none;
+    }
+</style>
 
-<h2>Desempenho:</h2>
-<p>Acessos: {{acessos}}</p>
-<p>Total de úsuaios: {{id}}</p>
+<input type="password" name="pass" id="pass">
+<button onclick="enviar()">enviar</button>
+
+<script>
+
+
+    function enviar(){
+            const body = JSON.stringify({senha:document.getElementById('pass').value})
+    const headers = { 'Content-Type': 'application/json'}
+    fetch('api/administrador', {method: 'post', body: body, headers}).then(resp => {
+        return resp.json()
+    }
+        
+       
+    ).then(json => {
+        if(json.result == true){
+             document.getElementById('container').innerHTML="<h1>Administrador</h1> <h2>Pessoas online:</h2> <p>Conversa aleatória: {{online}}, Crushs: {{crushs}}.</p> <h2>Desempenho:</h2> <p>Acessos: {{acessos}}</p> <p>Total de úsuaios: {{id}}</p>"
+        }
+    }).catch(
+        window.alert('ERRO!')
+    )
+    }
+</script>
+
+
+

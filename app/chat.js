@@ -187,7 +187,7 @@ res.render('chat', {modo: 'crushs'})
 
 
 blacklistfunc()
- function blacklistfunc(){ 
+async function blacklistfunc(){ 
 
 	 for(let index = 0; index < blacklist.length; index++){
 			var user = blacklist[index]
@@ -195,13 +195,15 @@ blacklistfunc()
 			var pos2 = crushs.indexOf(user)
 			
 
-			if(pos != -1){
+			if(onlineUsers[pos] != -1){
 				onlineUsers.splice(pos, 1)
 			}
 			
-			if(pos2 != -1){
+			if(crushs[pos2] != -1){
 				crushs.splice(pos2, 1)
 			}
+
+			
 			blacklist.splice(index, 1)
 
 }
@@ -212,9 +214,9 @@ blacklistfunc()
 		blacklist.push(user2)
 
 	} 
-	
 
-			setTimeout(blacklistfunc, 3000)
+	
+		setTimeout(blacklistfunc, 100)
 }
  
 app.post('/api/send', (req, res) => { 
@@ -323,10 +325,7 @@ app.post('/api/resp/:modo', (req, res) => {
 		sex: null
 		} 
 	
-		 if(modo == -1){
-		
-			res.send({m: 'erro'})
-	 }else{
+	
 	
 	
 
@@ -360,7 +359,7 @@ app.post('/api/resp/:modo', (req, res) => {
 		res.send({m:false})
 		}
 	}
-	 }
+	 
  })
  
  app.post('/api/writing', (req, res) => {
@@ -398,10 +397,18 @@ app.post('/api/resp/:modo', (req, res) => {
  })
 
  app.get('/administrador', (req, res, next) => {
-	if(req.cookies.admin == 'meusDados'){
-		res.render('admin',{online: onlineUsers.length, crushs: crushs.length, acessos: acessos, id: id})
+	res.render('admin')
+ })
+
+
+ app.post('/api/administrador', (req, res, next) => {
+	console.log(req.body.senha)
+	if(req.body.senha == 'meusDados'){
+		res.send({result: true, online: onlineUsers.length})
+		console.log('sucess')
 	}else{
-	next()}
+		res.sendStatus(500)
+	}
  })
 
  app.post('/products', (req, res) => {
@@ -411,6 +418,7 @@ app.post('/api/resp/:modo', (req, res) => {
 	let a = getRandomInt(products.products.length);
 	res.json(products.products[a])
  })
+
   
 // página 404 personalizada 
 app.use((req, res) => {
