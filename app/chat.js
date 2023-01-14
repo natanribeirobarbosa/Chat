@@ -117,10 +117,14 @@ app.get('/chat',(req, res) => {
 		if(onlineUsers.indexOf(req.session.name)  != -1){
 				onlineUsers.splice(onlineUsers.indexOf(req.session.name), 1)
 
-				res.redirect('/')
+				
 			
 		}else{
-				onlineUsers.push(req.session.name) 
+				if(crushs.indexOf(req.session.name)  != -1){
+			crushs.splice(crushs.indexOf(req.session.name), 1)
+	
+		}else{
+			
 
 
 
@@ -138,7 +142,7 @@ app.get('/chat',(req, res) => {
 		 
 	res.render('chat', {modo: 'onlineUsers'})
 	
-		
+			}
 }})  
 
 app.get('/crushs',(req, res) => {
@@ -149,10 +153,10 @@ app.get('/crushs',(req, res) => {
 	}else{
 		if(crushs.indexOf(req.session.name)  != -1){
 			crushs.splice(crushs.indexOf(req.session.name), 1)
-			res.redirect('/')
+	
 		}else{
 
-			crushs.push(req.session.name)
+	
 			if(blacklist.indexOf(req.session.name) == -1){
 				blacklist.push(req.session.name)
 			}
@@ -197,6 +201,18 @@ async function blacklistfunc(){
 			if(crushs[pos2] != -1){
 				crushs.splice(pos2, 1)
 			}
+
+			if(writing.indexOf(user) != -1){
+				writing.splice(writing.indexOf(user), 1)
+			}
+
+			delete names[user]
+			delete sexo[user]
+
+
+
+			mensagens[user] = []
+			
 
 			
 			blacklist.splice(index, 1)
@@ -311,7 +327,9 @@ app.post('/api/resp/:modo', (req, res) => {
 		default:
 			modo = onlineUsers;;
 	  }
-	  
+	  if(modo.indexOf(req.session.name) == -1){
+		modo.push(req.session.name) 
+	  }
 
 	 var user = {
 		name: "???",
@@ -322,7 +340,7 @@ app.post('/api/resp/:modo', (req, res) => {
 	
 	
 	
-	console.log(user.position)
+	
 
 
 	 if(user.position % 2 != 0){//A posição do úsuario no array é impar? se sim, seu destino é uma posição atrás no array
@@ -374,8 +392,13 @@ app.post('/api/resp/:modo', (req, res) => {
  app.post('/api/bye', (req, res) => {
 	var pos = onlineUsers.indexOf(req.session.name)
 	var pos2 = crushs.indexOf(req.session.name)
-	mensagens[req.session.name] = []
-	writing.splice(writing.indexOf(req.session.name), 1)
+	mensagens[req.session.name] = undefined
+
+		if(writing.indexOf(req.session.name) != -1){
+				writing.splice(writing.indexOf(req.session.name), 1)
+			}
+
+
 
 
 	if(pos != -1){
@@ -432,6 +455,6 @@ app.use((err, req, res, next) => {
  res.send('500 - Server Error')
 })
 app.listen(port, () => console.log(
- `Express started on http://localhost:${port}; `
+ `Express started on http://localhost:${port}, and in ${app.get('env')} mode.; `
  + `press Ctrl-C to terminate.`))
    
