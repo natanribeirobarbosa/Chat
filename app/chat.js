@@ -227,7 +227,7 @@ async function blacklistfunc(){
 	} 
 
 	
-		setTimeout(blacklistfunc, 100)
+		setTimeout(blacklistfunc, 2500)
 }
  
 app.post('/api/send', (req, res) => { 
