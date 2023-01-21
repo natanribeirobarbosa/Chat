@@ -119,7 +119,7 @@ app.get('/chat',(req, res) => {
 
 				
 			
-		}else{
+		}
 				if(crushs.indexOf(req.session.name)  != -1){
 			crushs.splice(crushs.indexOf(req.session.name), 1)
 	
@@ -143,7 +143,7 @@ app.get('/chat',(req, res) => {
 	res.render('chat', {modo: 'onlineUsers'})
 	
 			}
-}})  
+})  
 
 app.get('/crushs',(req, res) => {
 	if(onlineUsers.indexOf(req.session.name)  != -1){

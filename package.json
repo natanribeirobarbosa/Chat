@@ -8,7 +8,7 @@
     "nodemon": "^2.0.20"
   },
   "scripts": {
-    "stress": "artillry quick --count 20 -n 40 https://www.ifriends.com.br"
+    "stress": "artillery quick --count 2000 -n 400 https://www.ifriends.com.br"
   },
   "name": "chat",
   "version": "1.0.0",
